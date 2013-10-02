@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<?import java.net.URL?>
+
+<?import com.twasyl.compilerfx.control.cell.*?>
+<?import com.twasyl.compilerfx.control.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.MavenRepositoriesController"
+        prefWidth="1024" prefHeight="800" fx:id="root">
+
+    <top>
+        <ToolBar>
+            <Button onAction="#displayAddRepositoryScreen">
+                <tooltip>
+                    <Tooltip text="Add a originalRepository" />
+                </tooltip>
+                <graphic>
+                    <ImageView>
+                        <image>
+                            <Image url="@/com/twasyl/compilerfx/images/add_repo.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button onAction="#deleteRepositories">
+                <tooltip>
+                    <Tooltip text="Delete selection" />
+                </tooltip>
+                <graphic>
+                    <ImageView>
+                        <image>
+                            <Image url="@/com/twasyl/compilerfx/images/delete_repo.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <SplitMenuButton onAction="#compileSelection">
+                <tooltip>
+                    <Tooltip text="Compile selection" />
+                </tooltip>
+                <graphic>
+                    <ImageView>
+                        <image>
+                            <Image url="@/com/twasyl/compilerfx/images/compile_repo.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+                <items>
+                    <MenuItem text="Compile" onAction="#compileSelection"/>
+                    <MenuItem text="Compile and execute post build commands" onAction="#compileAndExecutePostBuildCommandsOnSelection"/>
+                </items>
+            </SplitMenuButton>
+            <Button onAction="#reloadRepositories">
+                <tooltip>
+                    <Tooltip text="Reload repositories" />
+                </tooltip>
+                <graphic>
+                    <ImageView>
+                        <image>
+                            <Image url="@/com/twasyl/compilerfx/images/reload_repo.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </ToolBar>
+    </top>
+
+    <center>
+        <TabPane fx:id="workspaces" />
+    </center>
+</BorderPane>
+

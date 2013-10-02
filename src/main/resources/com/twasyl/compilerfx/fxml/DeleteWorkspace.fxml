@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+
+
+<?import com.twasyl.compilerfx.utils.WorkspaceStringConverter?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.DeleteWorkspaceController"
+            spacing="10">
+
+    <children>
+        <HBox spacing="10">
+            <Label text="Move repositories to:" />
+            <ChoiceBox fx:id="workspaces">
+                <converter>
+                    <WorkspaceStringConverter />
+                </converter>
+            </ChoiceBox>
+        </HBox>
+
+        <HBox spacing="10">
+            <Button text="Cancel" onAction="#cancel" />
+            <Button text="Delete" onAction="#delete" />
+        </HBox>
+    </children>
+</VBox>

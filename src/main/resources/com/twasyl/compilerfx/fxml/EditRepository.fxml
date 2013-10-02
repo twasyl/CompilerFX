@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+
+<?import com.twasyl.compilerfx.utils.WorkspaceStringConverter?>
+<?import com.twasyl.compilerfx.beans.Configuration?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.EditRepositoryController"
+            spacing="10">
+    <fx:define>
+        <Configuration fx:id="configuration" fx:factory="getInstance" />
+    </fx:define>
+
+    <children>
+        <Label styleClass="screen-title" text="Edit a repository" />
+
+        <HBox spacing="10">
+            <Label text="Name:" />
+            <TextField prefColumnCount="25" fx:id="name" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Path:" />
+            <TextField prefColumnCount="25" fx:id="path" />
+            <Button text="..." onAction="#browse" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Options:" />
+            <TextField prefColumnCount="25" fx:id="options" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Post build commands:" />
+            <TextArea prefColumnCount="25" prefRowCount="5" fx:id="postBuildCommands" />
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Workspace:" />
+            <ChoiceBox fx:id="workspace" items="${configuration.workspacesAsList}">
+                <converter>
+                    <WorkspaceStringConverter />
+                </converter>
+            </ChoiceBox>
+        </HBox>
+        <HBox>
+            <CheckBox text="clean" selected="true" fx:id="clean" />
+            <CheckBox text="install" selected="true" fx:id="install" />
+        </HBox>
+        <HBox spacing="10">
+            <Button text="Cancel" onAction="#cancel" />
+            <Button text="Edit" onAction="#edit" />
+        </HBox>
+    </children>
+</VBox>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<?import java.net.URL?>
+
+<?import com.twasyl.compilerfx.control.cell.*?>
+<?import com.twasyl.compilerfx.control.*?>
+
+<?import javafx.scene.text.Text?>
+<TableView xmlns:fx="http://javafx.com/fxml" fx:id="repositoriesTable"
+           fx:controller="com.twasyl.compilerfx.controllers.WorkspaceController"
+            onDragOver="#onDragOver" onDragDropped="#onDragDropped">
+
+    <columnResizePolicy>
+        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+    </columnResizePolicy>
+
+    <rowFactory>
+        <MavenRepositoryTableRowFactory />
+    </rowFactory>
+
+    <placeholder>
+        <Label text="Drag a repository here" />
+    </placeholder>
+
+    <columns>
+        <TableColumn sortable="false" prefWidth="100">
+            <graphic>
+                <CheckBox text="Compile" fx:id="compileAll" />
+            </graphic>
+            <cellValueFactory>
+                <PropertyValueFactory property="selected" />
+            </cellValueFactory>
+            <cellFactory>
+                <CompileRepositoryCellFactory />
+            </cellFactory>
+        </TableColumn>
+        <TableColumn text="Name" sortable="false">
+            <cellValueFactory>
+                <PropertyValueFactory property="repositoryName" />
+            </cellValueFactory>
+        </TableColumn>
+        <TableColumn text="Status" sortable="false">
+            <cellValueFactory>
+                <PropertyValueFactory property="status" />
+            </cellValueFactory>
+            <cellFactory>
+                <StatusCellFactory />
+            </cellFactory>
+        </TableColumn>
+        <TableColumn text="Execution result" sortable="false" prefWidth="150">
+            <cellValueFactory>
+                <PropertyValueFactory property="lastExecutionStack" />
+            </cellValueFactory>
+            <cellFactory>
+                <MavenOutputCellFactory onAction="#displayExecutionResult" />
+            </cellFactory>
+        </TableColumn>
+        <TableColumn text="Priority" sortable="false">
+            <cellValueFactory>
+                <PropertyValueFactory property="priority" />
+            </cellValueFactory>
+            <cellFactory>
+                <PriorityCellFactory />
+            </cellFactory>
+        </TableColumn>
+    </columns>
+</TableView>
