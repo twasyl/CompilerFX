@@ -2,6 +2,7 @@ package com.twasyl.compilerfx.controllers;
 
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.beans.Workspace;
+import com.twasyl.compilerfx.control.Dialog;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
 import com.twasyl.compilerfx.utils.UIUtils;
 import javafx.beans.property.ObjectProperty;
@@ -81,17 +82,17 @@ public class WorkspaceController implements Initializable {
             /** Perform some checks */
             if(!repositoryFolder.exists()) {
                 repositoryValid = false;
-                UIUtils.showErrorScreen(String.format("The repository '%1$s' does not exist", repositoryFolder.getAbsolutePath()));
+                Dialog.showErrorDialog(null, "Error", String.format("The repository '%1$s' does not exist", repositoryFolder.getAbsolutePath()));
             }
 
             if(repositoryValid && repositoryFolder.isFile()) {
                 repositoryValid = false;
-                UIUtils.showErrorScreen("The repository must be a folder");
+                Dialog.showErrorDialog(null, "Error", "The repository must be a folder");
             }
 
             if(repositoryValid && !(new File(repositoryFolder, "pom.xml")).exists()) {
                 repositoryValid = false;
-                UIUtils.showErrorScreen("Can not find pom.xml file in the repository");
+                Dialog.showErrorDialog(null, "Error", "Can not find pom.xml file in the repository");
             }
 
             if(repositoryValid) {

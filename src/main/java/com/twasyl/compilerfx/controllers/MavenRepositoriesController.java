@@ -15,18 +15,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class MavenRepositoriesController implements Initializable {
 
     @FXML private TabPane workspaces;
+    @FXML private SplitMenuButton abortAll;
 
     @FXML private void compileSelection(ActionEvent event) {
         compileSelection(false);
@@ -66,6 +69,39 @@ public class MavenRepositoriesController implements Initializable {
             Parent parent = FXMLLoader.load(getClass().getResource("/com/twasyl/compilerfx/fxml/AddRepository.fxml"));
             CompilerFXController.getCurrentInstance().switchScreen(parent);
         } catch (IOException e) {
+        }
+    }
+
+    @FXML private void abortWorkspaceBuilds(ActionEvent event) {
+        Workspace workspace = ((WorkspaceTab) this.workspaces.getSelectionModel().getSelectedItem()).getWorkspace();
+        Iterator<MavenRepository> builds = Configuration.getInstance().getCurrentBuilds().iterator();
+        MavenRepository repository;
+
+        while(builds.hasNext()) {
+            repository = builds.next();
+
+            synchronized (repository) {
+                if(repository.getWorkspace().getId() == workspace.getId() && repository.getActiveProcess() != null) {
+                    repository.setStatus(Status.ABORTED);
+                    repository.getActiveProcess().destroy();
+                }
+            }
+        }
+    }
+
+    @FXML private void abortAllWorkspacesBuilds(ActionEvent event) {
+        Iterator<MavenRepository> builds = Configuration.getInstance().getCurrentBuilds().iterator();
+        MavenRepository repository;
+
+        while(builds.hasNext()) {
+            repository = builds.next();
+
+            synchronized (repository) {
+                if(repository.getActiveProcess() != null) {
+                    repository.setStatus(Status.ABORTED);
+                    repository.getActiveProcess().destroy();
+                }
+            }
         }
     }
 
@@ -149,5 +185,7 @@ public class MavenRepositoriesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initUI();
+
+        abortAll.disableProperty().bind(Configuration.getInstance().currentBuildsProperty().emptyProperty());
     }
 }

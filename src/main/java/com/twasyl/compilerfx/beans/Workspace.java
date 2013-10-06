@@ -2,15 +2,13 @@ package com.twasyl.compilerfx.beans;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.TreeSet;
 
-public class Workspace {
+public class Workspace implements PropertyBean {
 
     private final LongProperty id = new SimpleLongProperty();
     private final StringProperty name = new SimpleStringProperty();
@@ -50,4 +48,12 @@ public class Workspace {
     public BooleanProperty activeProperty() { return this.active; }
     public boolean getActive() { return this.activeProperty().get(); }
     public void setActive(boolean active) { this.activeProperty().set(active); }
+
+    @Override
+    public void unbindAll() {
+        if(idProperty().isBound()) idProperty().unbind();
+        if(nameProperty().isBound()) nameProperty().unbind();
+        if(repositoriesProperty().isBound()) repositoriesProperty().unbind();
+        if(activeProperty().isBound()) activeProperty().unbind();
+    }
 }

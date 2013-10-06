@@ -3,6 +3,7 @@ package com.twasyl.compilerfx.controllers;
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.beans.Workspace;
+import com.twasyl.compilerfx.control.Dialog;
 import com.twasyl.compilerfx.enums.Status;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
 import com.twasyl.compilerfx.utils.UIUtils;
@@ -58,7 +59,7 @@ public class AddRepositoryController implements Initializable {
         /** Perform some checks */
         if(!repositoryFolder.exists()) {
             repositoryValid = false;
-            UIUtils.showErrorScreen(String.format("The repository '%1$s' does not exist", repositoryFolder.getAbsolutePath()));
+            Dialog.showErrorDialog(null, "Error", String.format("The repository '%1$s' does not exist", repositoryFolder.getAbsolutePath()));
         }
 
         if(repositoryValid) {
@@ -66,11 +67,13 @@ public class AddRepositoryController implements Initializable {
 
             if(!pom.exists()) {
                 repositoryValid = false;
-                UIUtils.showErrorScreen("Can not find pom.xml file in the repository");
+                Dialog.showErrorDialog(null, "Error", "Can not find pom.xml file in the repository");
             }
         }
 
         if(repositoryValid) {
+            this.repository.unbindAll();
+
             this.repository.setId((int) System.currentTimeMillis());
             this.repository.setStatus(Status.READY);
             this.repository.postBuildCommandsProperty().unbind();
@@ -84,10 +87,8 @@ public class AddRepositoryController implements Initializable {
                 this.repository.setPriority(ConfigurationWorker.getNextAvailablePriority());
             }
 
-            this.repository.pathProperty().unbind();
             this.repository.setPath(this.repository.getPath().replaceAll("\\\\", "/"));
 
-            this.repository.workspaceProperty().unbind();
             this.repository.getWorkspace().getRepositories().add(this.repository);
 
             Configuration.getInstance().getRepositories().add(this.repository);

@@ -13,6 +13,7 @@
 <?import com.twasyl.compilerfx.control.cell.*?>
 <?import com.twasyl.compilerfx.control.*?>
 
+<?import com.twasyl.compilerfx.beans.Configuration?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.MavenRepositoriesController"
         prefWidth="1024" prefHeight="800" fx:id="root">
 
@@ -20,7 +21,7 @@
         <ToolBar>
             <Button onAction="#displayAddRepositoryScreen">
                 <tooltip>
-                    <Tooltip text="Add a originalRepository" />
+                    <Tooltip text="Add a repository" />
                 </tooltip>
                 <graphic>
                     <ImageView>
@@ -56,6 +57,22 @@
                 <items>
                     <MenuItem text="Compile" onAction="#compileSelection"/>
                     <MenuItem text="Compile and execute post build commands" onAction="#compileAndExecutePostBuildCommandsOnSelection"/>
+                </items>
+            </SplitMenuButton>
+            <SplitMenuButton fx:id="abortAll" onAction="#abortWorkspaceBuilds">
+                <tooltip>
+                    <Tooltip text="Abort all" />
+                </tooltip>
+                <graphic>
+                    <ImageView>
+                        <image>
+                            <Image url="@/com/twasyl/compilerfx/images/stop.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+                <items>
+                    <MenuItem text="Abort for this workspace" onAction="#abortWorkspaceBuilds"/>
+                    <MenuItem text="Abort for all workspaces" onAction="#abortAllWorkspacesBuilds"/>
                 </items>
             </SplitMenuButton>
             <Button onAction="#reloadRepositories">

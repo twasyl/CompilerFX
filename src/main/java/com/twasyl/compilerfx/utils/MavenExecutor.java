@@ -2,6 +2,7 @@ package com.twasyl.compilerfx.utils;
 
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
+import com.twasyl.compilerfx.control.Dialog;
 import com.twasyl.compilerfx.enums.Status;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
@@ -55,7 +56,7 @@ public class MavenExecutor {
         }
 
         if(!commandValid) {
-            UIUtils.showErrorScreen(message);
+            Dialog.showErrorDialog(null, "Error", message);
         } else {
             Runnable run = new Runnable() {
                 @Override
@@ -72,7 +73,7 @@ public class MavenExecutor {
                         repositoryDirectory = new File(repository.getPath());
 
                         if(!repositoryDirectory.exists()) {
-                            UIUtils.showErrorScreen(String.format("Can not compile repository '%1$s' because it does not exist", repository.getRepositoryName()));
+                            Dialog.showErrorDialog(null, "Error", String.format("Can not compile repository '%1$s' because it does not exist", repository.getRepositoryName()));
                             if(stopIfFailure) break;
                         } else {
                             repository.setLastExecutionStack(null);
@@ -193,7 +194,7 @@ public class MavenExecutor {
                     repositoryDirectory = new File(repository.getPath());
 
                     if(!repositoryDirectory.exists()) {
-                        UIUtils.showErrorScreen(String.format("Can not compile repository '%1$s' because it does not exist", repository.getRepositoryName()));
+                        Dialog.showErrorDialog(null, "Error", String.format("Can not compile repository '%1$s' because it does not exist", repository.getRepositoryName()));
                         if(stopIfFailure) break;
                     } else {
                         try {

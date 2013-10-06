@@ -3,6 +3,7 @@ package com.twasyl.compilerfx.controllers;
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.beans.Workspace;
+import com.twasyl.compilerfx.control.Dialog;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
 import com.twasyl.compilerfx.utils.UIUtils;
 import javafx.application.Platform;
@@ -64,7 +65,7 @@ public class EditRepositoryController implements Initializable {
         /** Perform some checks */
         if(!repositoryFolder.exists()) {
             repositoryValid = false;
-            UIUtils.showErrorScreen(String.format("The originalRepository '%1$s' does not exist", repositoryFolder.getAbsolutePath()));
+            Dialog.showErrorDialog(null, "Error", String.format("The originalRepository '%1$s' does not exist", repositoryFolder.getAbsolutePath()));
         }
 
         if(repositoryValid) {
@@ -72,17 +73,15 @@ public class EditRepositoryController implements Initializable {
 
             if(!pom.exists()) {
                 repositoryValid = false;
-                UIUtils.showErrorScreen("Can not find pom.xml file in the originalRepository");
+                Dialog.showErrorDialog(null, "Error", "Can not find pom.xml file in the originalRepository");
             }
         }
 
         if(repositoryValid) {
-            this.editedRepository.get().workspaceProperty().unbind();
+            this.editedRepository.get().unbindAll();
 
-            this.editedRepository.get().pathProperty().unbind();
             this.editedRepository.get().setPath(this.editedRepository.get().getPath().replaceAll("\\\\", "/"));
 
-            this.editedRepository.get().postBuildCommandsProperty().unbind();
             if(this.editedRepository.get().getPostBuildCommands() != null)
                 this.editedRepository.get().setPostBuildCommands(this.editedRepository.get().getPostBuildCommands().replaceAll("\n", ""));
 

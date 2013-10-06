@@ -3,9 +3,13 @@ package com.twasyl.compilerfx.control;
 import com.twasyl.compilerfx.utils.UIUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -45,17 +49,11 @@ public class Dialog extends Stage {
     }
 
     public static Response showDialog(Stage owner, String title, Node content) {
-         final Button okButton = new Button("OK");
+        final Button okButton = new Button("OK");
 
         final Dialog dialog = buildDialog(owner, title, content, okButton);
 
-        okButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                dialog.setUserResponse(Response.OK);
-                dialog.close();
-            }
-        });
+        setButtonAction(okButton, Response.OK, dialog);
 
         dialog.showDialog();
 
@@ -73,29 +71,48 @@ public class Dialog extends Stage {
 
         final Dialog dialog = buildDialog(owner, title, messageText, noButton, yesButton);
 
-        yesButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                dialog.setUserResponse(Response.YES);
-                dialog.close();
-            }
-        });
-
-        noButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                dialog.setUserResponse(Response.NO);
-                dialog.close();
-            }
-        });
+        setButtonAction(yesButton, Response.YES, dialog);
+        setButtonAction(noButton, Response.NO, dialog);
 
         dialog.showDialog();
 
         return dialog.getUserResponse();
     }
 
+    public static Response showErrorDialog(Stage owner, String title, String message) {
+        final Button okButton = new Button("OK");
+
+        final Text textMessage = new Text(message);
+        textMessage.setStyle("-fx-fill: white; -fx-font-size: 15pt;");
+
+        final ImageView image = new ImageView(new Image(UIUtils.class.getResource("/com/twasyl/compilerfx/images/error_white.png").toExternalForm()));
+
+        final HBox root = new HBox(10);
+        root.setPadding(new Insets(10));
+        root.getChildren().addAll(textMessage, image);
+
+        final Dialog dialog = buildDialog(owner, title, root, okButton);
+
+        setButtonAction(okButton, Response.OK, dialog);
+
+        dialog.showDialog();
+
+        return dialog.getUserResponse();
+    }
+
+    private static void setButtonAction(final Button button, final Response response, final Dialog dialog) {
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                dialog.setUserResponse(response);
+                dialog.close();
+            }
+        });
+    }
+
     private static Dialog buildDialog(Stage owner, String title, Node content, Button ... buttons) {
         final HBox buttonsBox = new HBox(10);
+        buttonsBox.setAlignment(Pos.BASELINE_RIGHT);
         buttonsBox.getChildren().addAll(buttons);
 
         final VBox dialogContent = new VBox(10);

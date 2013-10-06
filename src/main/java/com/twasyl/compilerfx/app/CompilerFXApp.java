@@ -19,7 +19,7 @@ import java.util.Iterator;
 
 public class CompilerFXApp extends Application {
 
-    public static String version = "0.1.0";
+    public static String version = "0.2.0";
 
     @Override
     public void start(final Stage stage) throws Exception {
@@ -44,9 +44,12 @@ public class CompilerFXApp extends Application {
 
                         while(processIterator.hasNext()) {
                             repository = processIterator.next();
-                            repository.setStatus(Status.ABORTED);
 
-                            if(repository.getActiveProcess() != null) repository.getActiveProcess().destroy();
+                            synchronized (repository) {
+                                repository.setStatus(Status.ABORTED);
+
+                                if(repository.getActiveProcess() != null) repository.getActiveProcess().destroy();
+                            }
                         }
                     } else {
                         windowEvent.consume();

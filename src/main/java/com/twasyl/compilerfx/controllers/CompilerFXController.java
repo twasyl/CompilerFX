@@ -12,14 +12,18 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -75,12 +79,33 @@ public class CompilerFXController implements Initializable {
     }
 
     @FXML private void showAbout(ActionEvent event) {
+        final StringBuilder changeLog = new StringBuilder();
+        changeLog.append("Change logs:\n\n");
+        changeLog.append("version 0.2.0\n\n");
+        changeLog.append("  - Abort feature for the current workspace and for all\n");
+        changeLog.append("  - Fix bug that blocked workspace's renaming when the workspace was freshly added\n");
+        changeLog.append("  - Use dialogs in the whole application, even for error messages\n");
+        changeLog.append("  - Ensure properties of workspaces and repositories are unbind when adding/editing them\n");
+        changeLog.append("  - Correction of the label of the button for adding a repository (present in the toolbar)\n");
+        changeLog.append("  - Buttons in dialogs are now positioned on the right of the dialog\n");
+        changeLog.append("  - Possibility to use ENTER to add a workspace in the add screen\n");
+        changeLog.append("  - Add change logs in About screen");
+
+        final TextArea changeLogText = new TextArea(changeLog.toString());
+        changeLogText.setStyle("-fx-text-fill: white; -fx-background-color: transparent;");
+        changeLogText.setWrapText(true);
+        changeLogText.setPrefSize(500, 300);
+        changeLogText.setMaxSize(500, 300);
+        changeLogText.setMinSize(500, 300);
+
+
         final VBox helpContent = new VBox(10);
         helpContent.setAlignment(Pos.CENTER);
         helpContent.getChildren().addAll(
                 new Label("CompilerFX"),
                 new Label("version " + CompilerFXApp.version),
-                new Label("Author: Thierry Wasylczenko")
+                new Label("Author: Thierry Wasylczenko"),
+                changeLogText
         );
 
         Dialog.showDialog(null, "About", helpContent);

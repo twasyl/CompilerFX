@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MavenRepository {
+public class MavenRepository implements PropertyBean {
 
     public static enum Goal {
         CLEAN("clean"), INSTALL("install");
@@ -100,5 +100,26 @@ public class MavenRepository {
         }
 
         return result;
+    }
+
+    @Override
+    public void unbindAll() {
+        if(idProperty().isBound()) idProperty().unbind();
+        if(pathProperty().isBound()) pathProperty().unbind();
+        if(repositoryNameProperty().isBound()) repositoryNameProperty().unbind();
+        if(statusProperty().isBound()) statusProperty().unbind();
+        if(selectedProperty().isBound()) selectedProperty().unbind();
+
+        for(Map.Entry<StringProperty, BooleanProperty> entry : goalsProperty().entrySet()) {
+            if(entry.getKey().isBound()) entry.getKey().unbind();
+            if(entry.getValue().isBound()) entry.getValue().unbind();
+        }
+
+        if(lastExecutionStackProperty().isBound()) lastExecutionStackProperty().unbind();
+        if(priorityProperty().isBound()) priorityProperty().unbind();
+        if(optionsProperty().isBound()) optionsProperty().unbind();
+        if(postBuildCommandsProperty().isBound()) postBuildCommandsProperty().unbind();
+        if(workspaceProperty().isBound()) workspaceProperty().unbind();
+        if(activeProcessProperty().isBound()) activeProcessProperty().unbind();
     }
 }

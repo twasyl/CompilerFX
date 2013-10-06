@@ -17,7 +17,7 @@
 
         <HBox spacing="10">
             <Label text="Name:" />
-            <TextField prefColumnCount="25" fx:id="name" />
+            <TextField prefColumnCount="25" fx:id="name" onKeyPressed="#keyPressedOnName" />
         </HBox>
 
         <HBox spacing="10">
