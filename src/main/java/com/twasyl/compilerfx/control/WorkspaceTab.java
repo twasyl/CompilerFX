@@ -38,8 +38,14 @@ public class WorkspaceTab extends Tab {
             public void handle(ActionEvent actionEvent) {
 
                 if (getWorkspace() != null && getWorkspace().getRepositories().isEmpty()) {
-                    Configuration.getInstance().getWorkspaces().remove(getWorkspace());
-                    ConfigurationWorker.save();
+                    Dialog.Response response = Dialog.showConfirmDialog(null,
+                            "Delete workspace",
+                            String.format("Do you really want to delete the workspace '%1$s'?", getWorkspace().getName()));
+
+                    if(response == Dialog.Response.YES) {
+                        Configuration.getInstance().getWorkspaces().remove(getWorkspace());
+                        ConfigurationWorker.save();
+                    }
                 } else if (getWorkspace() != null && !getWorkspace().getRepositories().isEmpty()) {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/twasyl/compilerfx/fxml/DeleteWorkspace.fxml"));
 
@@ -76,10 +82,18 @@ public class WorkspaceTab extends Tab {
                             WorkspaceTab.this.setText(getWorkspace().getName());
                         } else if(keyEvent.getCode().equals(KeyCode.ENTER)) {
                             if(!field.getText().isEmpty()) {
-                                getWorkspace().setName(field.getText());
-                                ConfigurationWorker.save();
-                                WorkspaceTab.this.setGraphic(null);
-                                WorkspaceTab.this.setText(getWorkspace().getName());
+                                Dialog.Response response = Dialog.showConfirmDialog(null, "Rename workspace",
+                                        String.format("Do you really want to rename the workspace '%1$s' to '%2$s'?",
+                                                getWorkspace().getName(), field.getText()));
+
+                                if(response == Dialog.Response.YES) {
+                                    getWorkspace().setName(field.getText());
+                                    ConfigurationWorker.save();
+                                    WorkspaceTab.this.setGraphic(null);
+                                    WorkspaceTab.this.setText(getWorkspace().getName());
+                                }
+                            } else {
+                                Dialog.showErrorDialog(null, "Rename workspace", "The name of the workspace can not be empty");
                             }
                         }
                     }

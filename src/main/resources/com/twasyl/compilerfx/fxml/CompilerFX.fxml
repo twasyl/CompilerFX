@@ -15,6 +15,11 @@
     <top>
         <MenuBar>
             <menus>
+                <Menu text="File">
+                    <items>
+                        <MenuItem text="Quit" onAction="#quitApplication" />
+                    </items>
+                </Menu>
                 <Menu text="Tools">
                     <items>
                         <MenuItem text="Configuration" onAction="#showConfigurationScreen" />

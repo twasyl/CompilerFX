@@ -1,6 +1,7 @@
 package com.twasyl.compilerfx.control;
 
 import com.twasyl.compilerfx.utils.UIUtils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,6 +17,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 public class Dialog extends Stage {
 
@@ -37,7 +42,24 @@ public class Dialog extends Stage {
     public void showDialog() {
         sizeToScene();
         centerOnScreen();
-        showAndWait();
+
+        if(Platform.isFxApplicationThread()) { showAndWait(); }
+        else {
+            FutureTask<Void> future = new FutureTask<Void>(new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    showAndWait();
+                    return null;
+                }
+            });
+
+            Platform.runLater(future);
+            try {
+                future.get();
+            } catch (InterruptedException e) {
+            } catch (ExecutionException e) {
+            }
+        }
     }
 
     private Response getUserResponse() {
@@ -110,7 +132,7 @@ public class Dialog extends Stage {
         });
     }
 
-    private static Dialog buildDialog(Stage owner, String title, Node content, Button ... buttons) {
+    private static Dialog buildDialog(final Stage owner, final String title, final Node content, final Button ... buttons) {
         final HBox buttonsBox = new HBox(10);
         buttonsBox.setAlignment(Pos.BASELINE_RIGHT);
         buttonsBox.getChildren().addAll(buttons);
@@ -120,7 +142,23 @@ public class Dialog extends Stage {
 
         final Scene scene = UIUtils.createScene(dialogContent);
 
-        final Dialog dialog = new Dialog(title, owner, scene);
+        Dialog dialog = null;
+        if(Platform.isFxApplicationThread()) {
+            dialog = new Dialog(title, owner, scene);
+        } else {
+            FutureTask<Dialog> future = new FutureTask<Dialog>(new Callable<Dialog>() {
+                @Override
+                public Dialog call() throws Exception {
+                    return new Dialog(title, owner, scene);
+                }
+            });
+            Platform.runLater(future);
+            try {
+                dialog = future.get();
+            } catch (InterruptedException e) {
+            } catch (ExecutionException e) {
+            }
+        }
 
         return dialog;
     }

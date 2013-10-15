@@ -2,9 +2,10 @@ package com.twasyl.compilerfx.controllers;
 
 import com.twasyl.compilerfx.app.CompilerFXApp;
 import com.twasyl.compilerfx.control.Dialog;
-import com.twasyl.compilerfx.utils.UIUtils;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -12,21 +13,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.markdown4j.Markdown4jProcessor;
 
@@ -43,6 +40,10 @@ public class CompilerFXController implements Initializable {
 
     public static ObjectProperty<CompilerFXController> currentInstanceProperty() { return currentInstance; }
     public static CompilerFXController getCurrentInstance() { return currentInstanceProperty().get(); }
+
+    @FXML private void quitApplication(ActionEvent event) {
+        CompilerFXApp.getCurrent().closeApplication();
+    }
 
     @FXML private void showConfigurationScreen(ActionEvent event) {
 
@@ -81,7 +82,18 @@ public class CompilerFXController implements Initializable {
     @FXML private void showAbout(ActionEvent event) {
         final StringBuilder changeLog = new StringBuilder();
         changeLog.append("Change logs:\n\n");
-        changeLog.append("version 0.2.0\n\n");
+        changeLog.append("version 0.3.0:\n\n");
+        changeLog.append("  - Abort feature for the current workspace and for all\n");
+        changeLog.append("  - Feature for creating custom maven options\n");
+        changeLog.append("  - Help button in the add/edit repository screen for adding maven options\n");
+        changeLog.append("  - Add a File menu with a Quit item\n");
+        changeLog.append("  - Add confirmation message for edition and deletion of repositories\n");
+        changeLog.append("  - Add confirmation message for deletion of custom maven options\n");
+        changeLog.append("  - Add confirmation message for deletion of workspaces\n");
+        changeLog.append("  - Add confirmation message for renaming of workspaces\n");
+        changeLog.append("  - Add error message for renaming workspaces with empty names");
+        changeLog.append("\n\n");
+        changeLog.append("version 0.2.0:\n\n");
         changeLog.append("  - Abort feature for the current workspace and for all\n");
         changeLog.append("  - Fix bug that blocked workspace's renaming when the workspace was freshly added\n");
         changeLog.append("  - Use dialogs in the whole application, even for error messages\n");

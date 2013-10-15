@@ -3,6 +3,7 @@ package com.twasyl.compilerfx.controllers;
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.beans.Workspace;
+import com.twasyl.compilerfx.control.Dialog;
 import com.twasyl.compilerfx.control.WorkspaceTab;
 import com.twasyl.compilerfx.enums.Status;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
@@ -47,21 +48,25 @@ public class MavenRepositoriesController implements Initializable {
 
     @FXML private void deleteRepositories(ActionEvent event) {
 
-        WorkspaceTab selectedTab = (WorkspaceTab) this.workspaces.getSelectionModel().getSelectedItem();
+        Dialog.Response response = Dialog.showConfirmDialog(null, "Delete selection?", "Are you sure you want to delete the selection?");
 
-        final List<MavenRepository> repositoriesToRemove = new ArrayList<>();
-        boolean hasDoneModifications = false;
+        if(response == Dialog.Response.YES) {
+            WorkspaceTab selectedTab = (WorkspaceTab) this.workspaces.getSelectionModel().getSelectedItem();
 
-        for(MavenRepository repository : selectedTab.getSelectedRepositories()) {
-            if(repository.getStatus() != Status.COMPILING) {
-                repositoriesToRemove.add(repository);
+            final List<MavenRepository> repositoriesToRemove = new ArrayList<>();
+            boolean hasDoneModifications = false;
+
+            for(MavenRepository repository : selectedTab.getSelectedRepositories()) {
+                if(repository.getStatus() != Status.COMPILING) {
+                    repositoriesToRemove.add(repository);
+                }
             }
+
+            selectedTab.getWorkspace().getRepositories().removeAll(repositoriesToRemove);
+            hasDoneModifications = Configuration.getInstance().getRepositories().removeAll(repositoriesToRemove);
+
+            if(hasDoneModifications) ConfigurationWorker.save();
         }
-
-        selectedTab.getWorkspace().getRepositories().removeAll(repositoriesToRemove);
-        hasDoneModifications = Configuration.getInstance().getRepositories().removeAll(repositoriesToRemove);
-
-        if(hasDoneModifications) ConfigurationWorker.save();
     }
 
     @FXML private void displayAddRepositoryScreen(ActionEvent event) {

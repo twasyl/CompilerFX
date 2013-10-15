@@ -246,5 +246,6 @@
 
 .screen-title {
     -fx-font-size: 20pt;
-    -fx-text-fille: white;
+    -fx-text-fill: white;
+    -fx-padding: 20px;
 }

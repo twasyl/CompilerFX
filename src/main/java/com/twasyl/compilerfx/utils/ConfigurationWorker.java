@@ -31,6 +31,8 @@ public class ConfigurationWorker {
     private static final String REPOSITORY_WORKSPACE = "repository.id.%1$s.workspace";
     private static final String WORKSPACE_NAME = "workspace.id.%1$s.name";
     private static final String WORKSPACE_ACTIVE = "workspace.id.%1$s.active";
+    private static final String CUSTOM_MAVEN_OPTION = "maven.customOption.id.%1$s.option";
+    private static final String CUSTOM_MAVEN_OPTION_DESCRIPTION = "maven.customOption.id.%1$s.description";
 
     private static File getConfigurationFile() {
         if(configurationFile == null) {
@@ -55,13 +57,15 @@ public class ConfigurationWorker {
         Configuration.getInstance().getRepositories().clear();
         Configuration.getInstance().getWorkspaces().clear();
 
-
-        Workspace workspace;
         MavenRepository repository;
+        MavenRepository.MavenOption customOption;
+        Workspace workspace;
 
-        /* Repositories and workspaces keys */
+        /* Repositories and workspaces and custom options keys */
         List<String> repositoriesId = new ArrayList<>();
         List<String> workspacesId = new ArrayList<>();
+        List<String> customOptionsId = new ArrayList<>();
+
         /* Used for loading the repositories and set their workspace. Avoid loop of the collection in Configuration */
         Map<String, Workspace> tmpWorkspaces = new HashMap<>();
 
@@ -70,7 +74,20 @@ public class ConfigurationWorker {
                 repositoriesId.add(key.replace("repository.id.", "").replace(".name", ""));
             } else if(key.startsWith("workspace.id") && key.endsWith(".name")) {
                 workspacesId.add(key.replace("workspace.id.", "").replace(".name", ""));
+            } else if(key.startsWith("maven.customOption.id.") && key.endsWith(".option")) {
+                customOptionsId.add(key.replace("maven.customOption.id.", "").replace(".option", ""));
             }
+        }
+
+        /* Load custom options */
+        for(String customOptionId : customOptionsId) {
+            customOption = new MavenRepository.MavenOption();
+            customOption.setId(Long.parseLong(customOptionId));
+
+            customOption.setOption(properties.getProperty(String.format(CUSTOM_MAVEN_OPTION, customOptionId)));
+            customOption.setDescription(properties.getProperty(String.format(CUSTOM_MAVEN_OPTION_DESCRIPTION, customOptionId)));
+
+            Configuration.getInstance().getCustomMavenOptions().add(customOption);
         }
 
         /* Load workspaces */
@@ -130,6 +147,12 @@ public class ConfigurationWorker {
             writer = new PrintWriter(new FileOutputStream(getConfigurationFile()));
 
             writer.println(String.format("%1$s=%2$s", MAVEN_COMMAND_PROPERTY, Configuration.getInstance().getMavenCommand()));
+
+            for(MavenRepository.MavenOption option : Configuration.getInstance().getCustomMavenOptions()) {
+                writer.println(String.format(CUSTOM_MAVEN_OPTION.concat("=%2$s"), option.getId(), option.getOption()));
+                writer.println(String.format(CUSTOM_MAVEN_OPTION_DESCRIPTION.concat("=%2$s"), option.getId(),
+                        option.getDescription() != null && !option.getDescription().trim().isEmpty() ? option.getDescription() : ""));
+            }
 
             for(Workspace workspace : Configuration.getInstance().getWorkspaces()) {
                 writer.println(String.format(WORKSPACE_NAME.concat("=%2$s"), workspace.getId(), workspace.getName()));

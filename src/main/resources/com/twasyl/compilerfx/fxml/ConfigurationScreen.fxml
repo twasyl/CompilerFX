@@ -6,6 +6,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<?import com.twasyl.compilerfx.control.cell.DeleteMavenOptionCellFactory?>
+<?import com.twasyl.compilerfx.control.PathTextField?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.ConfigurationScreenController">
     <children>
         <Label styleClass="screen-title" text="Configuration" />
@@ -13,16 +17,56 @@
         <HBox spacing="10">
             <children>
                 <Label text="Maven command" />
-                <TextField fx:id="mvnCommand" />
+                <PathTextField fx:id="mvnCommand" />
                 <Button fx:id="browseMvnCommand" text="..." onAction="#browse" />
             </children>
         </HBox>
+
+        <Label styleClass="screen-title" text="Custom maven options" />
+
+        <HBox spacing="10">
+            <Label text="Option:" />
+            <TextField fx:id="customOptionOption" prefColumnCount="15" />
+            <Label text="Description:" />
+            <TextField fx:id="customOptionDescription" prefColumnCount="15" />
+            <Button text="Add" onAction="#addCustomOption" />
+        </HBox>
+
+        <TableView fx:id="customOptions">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+
+            <placeholder>
+                <Label text="No custom option defined yet" />
+            </placeholder>
+
+            <columns>
+                <TableColumn text="Option" sortable="false" prefWidth="150">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="option" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Description" sortable="false" prefWidth="250">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="description" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="" sortable="false">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                    <cellFactory>
+                        <DeleteMavenOptionCellFactory />
+                    </cellFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
 
         <HBox spacing="10">
             <Button text="Cancel" onAction="#cancel" />
             <Button text="Save" onAction="#save"  />
         </HBox>
-
     </children>
 </VBox>
 

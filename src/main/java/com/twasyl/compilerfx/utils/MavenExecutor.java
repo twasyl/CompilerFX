@@ -21,6 +21,78 @@ import java.util.regex.Pattern;
 
 public class MavenExecutor {
 
+    public static List<MavenRepository.MavenOption> getMavenOptions() {
+        final String[] command = new String[] {Configuration.getInstance().getMavenCommand(), "--help"};
+        final List<MavenRepository.MavenOption> options = new ArrayList<>();
+
+        for(MavenRepository.MavenOption option : Configuration.getInstance().getCustomMavenOptions()) {
+            options.add(option);
+        }
+
+        final ProcessBuilder builder = new ProcessBuilder(command);
+
+        BufferedReader reader = null;
+
+        try {
+            final Process process = builder.start();
+            process.waitFor();
+
+            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            MavenRepository.MavenOption option = null;
+            int spaceIndex, argTokenIndex, commaIndex;
+
+            while((line = reader.readLine()) != null) {
+                if(line.startsWith("Options:")) {
+                    line = reader.readLine();
+
+                    do {
+                        line = line.trim();
+
+                        if(line.startsWith("-")) {
+                            if(option != null) options.add(option);
+
+                            option = new MavenRepository.MavenOption();
+
+                            // Search options
+                            spaceIndex = line.indexOf(' ');
+                            argTokenIndex = line.indexOf("<arg>", spaceIndex);
+
+                            // Test if the option has the <arg> token after its name
+                            if(argTokenIndex != -1) {
+                                option.setOptionName(line.substring(0, argTokenIndex + 5));
+                            } else {
+                                option.setOptionName(line.substring(0, spaceIndex));
+                            }
+
+                            // Extract the description
+                            if(argTokenIndex != -1) option.setDescription(line.substring(argTokenIndex + 5).trim());
+                            else option.setDescription(line.substring(spaceIndex).trim());
+
+                            // Set the option
+                            commaIndex = option.getOptionName().indexOf(',');
+                            if(commaIndex != -1) option.setOption(option.getOptionName().substring(0, commaIndex));
+                            else option.setOption(option.getOptionName().substring(0));
+                        } else {
+                           option.setDescription(option.getDescription() + " " + line.trim());
+                        }
+                    } while((line = reader.readLine()) != null);
+                }
+            }
+        } catch (IOException e) {
+        } catch (InterruptedException e) {
+        } finally {
+            if(reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                }
+            }
+
+            return options;
+        }
+    }
+
     public static void execute(MavenRepository repository) {
         execute(repository, false);
     }

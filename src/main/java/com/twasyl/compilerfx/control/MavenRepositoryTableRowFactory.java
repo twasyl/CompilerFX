@@ -1,5 +1,6 @@
 package com.twasyl.compilerfx.control;
 
+import com.twasyl.compilerfx.app.CompilerFXApp;
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.beans.Workspace;
@@ -113,7 +114,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
 
                         Parent parent = (Parent) loader.load();
                         EditRepositoryController controller = loader.getController();
-                        controller.setOriginalRepository(row.getItem());
+                        controller.setRepository(row.getItem());
 
                         CompilerFXController.getCurrentInstance().switchScreen(parent);
                     } catch (IOException e) {
@@ -127,10 +128,16 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
             @Override
             public void handle(ActionEvent actionEvent) {
                 if(row.getItem() != null) {
-                    final MavenRepository repository =  row.getItem();
-                    repository.getWorkspace().getRepositories().remove(repository);
-                    Configuration.getInstance().getRepositories().remove(repository);
-                    ConfigurationWorker.save();
+                    Dialog.Response response = Dialog.showConfirmDialog(null,
+                            "Delete repository?",
+                            String.format("Are you sure you want to delete the repository '%1$s'?", row.getItem().getRepositoryName()));
+
+                    if(response == Dialog.Response.YES) {
+                        final MavenRepository repository =  row.getItem();
+                        repository.getWorkspace().getRepositories().remove(repository);
+                        Configuration.getInstance().getRepositories().remove(repository);
+                        ConfigurationWorker.save();
+                    }
                 }
             }
         });

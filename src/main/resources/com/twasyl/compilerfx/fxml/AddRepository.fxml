@@ -12,6 +12,7 @@
 <?import com.twasyl.compilerfx.utils.WorkspaceStringConverter?>
 <?import com.twasyl.compilerfx.beans.Configuration?>
 
+<?import com.twasyl.compilerfx.control.PathTextField?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.AddRepositoryController"
             spacing="10">
     <fx:define>
@@ -27,12 +28,13 @@
         </HBox>
         <HBox spacing="10">
             <Label text="Path:" />
-            <TextField prefColumnCount="25" fx:id="path" />
+            <PathTextField prefColumnCount="25" fx:id="path" />
             <Button text="..." onAction="#browse" />
         </HBox>
         <HBox spacing="10">
             <Label text="Options:" />
             <TextField prefColumnCount="25" fx:id="options" />
+            <Button text="?" onAction="#showOptionsHelp" />
         </HBox>
         <HBox spacing="10">
             <Label text="Post build commands:" />

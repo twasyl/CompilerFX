@@ -3,11 +3,8 @@ package com.twasyl.compilerfx.beans;
 import com.twasyl.compilerfx.enums.Status;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,6 +21,36 @@ public class MavenRepository implements PropertyBean {
 
         public String getGoalName() {
             return goalName;
+        }
+    }
+
+    public static class MavenOption implements PropertyBean {
+        private final LongProperty id = new SimpleLongProperty();
+        private final StringProperty option = new SimpleStringProperty();
+        private final StringProperty optionName = new SimpleStringProperty();
+        private final StringProperty description = new SimpleStringProperty();
+
+        public LongProperty idProperty() { return this.id; }
+        public long getId() { return this.idProperty().get(); }
+        public void setId(long id) { this.idProperty().set(id); }
+
+        public StringProperty optionProperty() { return this.option; }
+        public String getOption() { return this.optionProperty().get(); }
+        public void setOption(String option) { this.optionProperty().set(option); }
+
+        public StringProperty optionNameProperty() { return this.optionName; }
+        public String getOptionName() { return this.optionNameProperty().get(); }
+        public void setOptionName(String optionName) { this.optionNameProperty().set(optionName); }
+
+        public StringProperty descriptionProperty() { return this.description; }
+        public String getDescription() { return this.descriptionProperty().get(); }
+        public void setDescription(String description) { this.descriptionProperty().set(description); }
+
+        @Override
+        public void unbindAll() {
+            if(optionProperty().isBound()) optionProperty().unbind();
+            if(optionNameProperty().isBound()) optionNameProperty().unbind();
+            if(descriptionProperty().isBound()) descriptionProperty().unbind();
         }
     }
 
@@ -91,7 +118,6 @@ public class MavenRepository implements PropertyBean {
     public Boolean isGoalActive(Goal goal) {
         Boolean result = null;
 
-
         for(Map.Entry<StringProperty, BooleanProperty> entry : getGoals().entrySet()) {
             if(entry.getKey().get().equals(goal.getGoalName())) {
                 result = entry.getValue().getValue();
@@ -100,6 +126,33 @@ public class MavenRepository implements PropertyBean {
         }
 
         return result;
+    }
+
+    /**
+     * Duplicates values of a given repository into the current one.
+     * @param repository The repository to duplicate the values from
+     */
+    public void duplicateFrom(MavenRepository repository) {
+        if(!idProperty().isBound()) setId(repository.getId());
+        if(!repositoryNameProperty().isBound()) setRepositoryName(repository.getRepositoryName());
+        if(!pathProperty().isBound()) setPath(repository.getPath());
+        if(!activeProcessProperty().isBound()) setActiveProcess(repository.getActiveProcess());
+        if(!lastExecutionStackProperty().isBound()) setLastExecutionStack(repository.getLastExecutionStack());
+        if(!optionsProperty().isBound()) setOptions(repository.getOptions());
+        if(!postBuildCommandsProperty().isBound()) setPostBuildCommands(repository.getPostBuildCommands());
+        if(!priorityProperty().isBound()) setPriority(repository.getPriority());
+        if(!selectedProperty().isBound()) setSelected(repository.isSelected());
+        if(!statusProperty().isBound()) setStatus(repository.getStatus());
+        if(!workspaceProperty().isBound()) setWorkspace(repository.getWorkspace());
+
+        if(!goalsProperty().isBound()) {
+            for(Map.Entry<StringProperty, BooleanProperty> entry : repository.getGoals().entrySet()) {
+                getGoals().put(
+                        new SimpleStringProperty(entry.getKey().get()),
+                        new SimpleBooleanProperty(entry.getValue().get())
+                );
+            }
+        }
     }
 
     @Override

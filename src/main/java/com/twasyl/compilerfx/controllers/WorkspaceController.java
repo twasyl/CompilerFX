@@ -166,7 +166,7 @@ public class WorkspaceController implements Initializable {
         this.compileAll.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                if(getWorkspace() != null) {
+                if(getWorkspace() != null && newValue != null) {
                     for(MavenRepository repository : getWorkspace().getRepositories()) {
                         repository.setSelected(newValue);
                     }
