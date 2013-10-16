@@ -53,7 +53,7 @@
         </HBox>
         <HBox spacing="10">
             <Button text="Cancel" onAction="#cancel" />
-            <Button text="Edit" onAction="#edit" />
+            <Button text="Save" onAction="#edit" />
         </HBox>
     </children>
 </VBox>

@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 public class CompilerFXApp extends Application {
 
-    public static String version = "0.3.0";
+    public static String version = "0.3.1";
     private static final ReadOnlyObjectProperty<CompilerFXApp> current = new SimpleObjectProperty<>();
     private final ReadOnlyObjectProperty<Stage> currentStage = new SimpleObjectProperty<>();
 

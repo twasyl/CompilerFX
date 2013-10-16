@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +23,10 @@ import java.util.regex.Pattern;
 public class MavenExecutor {
 
     public static List<MavenRepository.MavenOption> getMavenOptions() {
-        final String[] command = new String[] {Configuration.getInstance().getMavenCommand(), "--help"};
+
+        final String[] command = OSUtils.isWindows() ?
+                new String[] {"cmd.exe", "/C", Configuration.getInstance().getMavenCommand(), "--help"} :
+                new String[] {Configuration.getInstance().getMavenCommand(), "--help"};
         final List<MavenRepository.MavenOption> options = new ArrayList<>();
 
         for(MavenRepository.MavenOption option : Configuration.getInstance().getCustomMavenOptions()) {
@@ -35,7 +39,6 @@ public class MavenExecutor {
 
         try {
             final Process process = builder.start();
-            process.waitFor();
 
             reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
@@ -80,7 +83,6 @@ public class MavenExecutor {
                 }
             }
         } catch (IOException e) {
-        } catch (InterruptedException e) {
         } finally {
             if(reader != null) {
                 try {
@@ -139,6 +141,7 @@ public class MavenExecutor {
 
                     Process process = null;
                     File repositoryDirectory = null;
+                    final boolean isWindows = OSUtils.isWindows();
 
                     for (final MavenRepository repository : repositories) {
 
@@ -154,6 +157,11 @@ public class MavenExecutor {
                                 Configuration.getInstance().currentBuildsProperty().add(repository);
 
                                 command.clear();
+                                if(isWindows) {
+                                    command.add("cmd.exe");
+                                    command.add("/C");
+                                }
+
                                 command.add(Configuration.getInstance().getMavenCommand());
 
                                 if(repository.getOptions() != null && !repository.getOptions().trim().isEmpty()) {
@@ -255,8 +263,9 @@ public class MavenExecutor {
         Runnable run = new Runnable() {
             @Override
             public void run() {
-
+                final boolean isWindows = OSUtils.isWindows();
                 final ProcessBuilder processBuilder = new ProcessBuilder();
+                List<String> command = new ArrayList<>();
 
                 Process process = null;
                 File repositoryDirectory = null;
@@ -284,7 +293,15 @@ public class MavenExecutor {
 
                                     while (groupIndex <= matcher.groupCount()) {
                                         processBuilder.directory(new File(repository.getPath()));
-                                        processBuilder.command(Arrays.asList(matcher.group(groupIndex).split(" ")));
+                                        command.clear();
+
+                                        if(isWindows) {
+                                            command.add("cmd.exe");
+                                            command.add("/C");
+                                        }
+
+                                        command.addAll(Arrays.asList(matcher.group(groupIndex).split(" ")));
+                                        processBuilder.command(command);
 
                                         process = processBuilder.start();
                                         repository.setActiveProcess(process);
@@ -363,7 +380,6 @@ public class MavenExecutor {
 
             try {
                 while((line = in.readLine()) != null) {
-
                     try {
                         repository.setLastExecutionStack(
                                 (repository.getLastExecutionStack() == null ? "" : repository.getLastExecutionStack())

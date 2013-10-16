@@ -82,6 +82,10 @@ public class CompilerFXController implements Initializable {
     @FXML private void showAbout(ActionEvent event) {
         final StringBuilder changeLog = new StringBuilder();
         changeLog.append("Change logs:\n\n");
+        changeLog.append("version 0.3.1:\n\n");
+        changeLog.append("  - Fix commands execution on Windows platforms\n");
+        changeLog.append("  - Edit button in edition screen for a repository is renamed to Save");
+        changeLog.append("\n\n");
         changeLog.append("version 0.3.0:\n\n");
         changeLog.append("  - Abort feature for the current workspace and for all\n");
         changeLog.append("  - Feature for creating custom maven options\n");

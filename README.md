@@ -12,6 +12,15 @@ can be displayed live in a window.
 Each build is launched inside the repository folder. In order to determine if the build is a success
 or not, the application checks the result of the mvn command.
 
+## Configuration
+
+In the **Tools** menu and then **Configuration**, you can define the configuration of the software. You will need to
+enter the full path of the **mvn** command.
+You will also be able to define custom maven options. For example if you often use an option like **-DskipTests=true**
+and you don't want to enter this option each time you add/edit a repository, you can define it here. Then when adding/editing
+a repository you will get it in the help window of the maven options.
+
+
 ## Workspaces
 
 A workspace allows you to have multiple repositories available in ***CompilerFX***, grouped
@@ -39,7 +48,8 @@ is executed before ***install***. Custom goals will be available in a next versi
 
 ## Maven options
 
-Maven option can be added when adding/editing a repository using the **Options** field.
+Maven option can be added when adding/editing a repository using the **Options** field. Using the help button, maven options
+are listed, default ones as well as custom ones. Double clicking on an option will add it automatically to the field.
 
 ## Post build commands
 
