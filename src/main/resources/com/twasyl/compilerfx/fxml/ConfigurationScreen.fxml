@@ -2,6 +2,8 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.collections.*?>
+
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -10,26 +12,39 @@
 
 <?import com.twasyl.compilerfx.control.cell.DeleteMavenOptionCellFactory?>
 <?import com.twasyl.compilerfx.control.PathTextField?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.ConfigurationScreenController">
+<?import com.twasyl.compilerfx.utils.LocaleStringConverter?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.twasyl.compilerfx.controllers.ConfigurationScreenController"
+        spacing="10">
     <children>
-        <Label styleClass="screen-title" text="Configuration" />
+        <Label styleClass="screen-title" text="%screen.configuration.title.label.configuration" />
 
         <HBox spacing="10">
             <children>
-                <Label text="Maven command" />
-                <PathTextField fx:id="mvnCommand" />
-                <Button fx:id="browseMvnCommand" text="..." onAction="#browse" />
+                <Label text="%screen.configuration.title.label.language" />
+                <ChoiceBox fx:id="language">
+                    <converter>
+                        <LocaleStringConverter />
+                    </converter>
+                </ChoiceBox>
             </children>
         </HBox>
 
-        <Label styleClass="screen-title" text="Custom maven options" />
+        <HBox spacing="10">
+            <children>
+                <Label text="%screen.configuration.label.mavenCommand" />
+                <PathTextField fx:id="mvnCommand" />
+                <Button fx:id="browseMvnCommand" text="%button.browse" onAction="#browse" />
+            </children>
+        </HBox>
+
+        <Label styleClass="screen-title" text="%screen.configuration.title.label.customMavenOptions" />
 
         <HBox spacing="10">
-            <Label text="Option:" />
+            <Label text="%screen.configuration.customMavenOptions.label.option" />
             <TextField fx:id="customOptionOption" prefColumnCount="15" />
-            <Label text="Description:" />
+            <Label text="%screen.configuration.customMavenOptions.label.description" />
             <TextField fx:id="customOptionDescription" prefColumnCount="15" />
-            <Button text="Add" onAction="#addCustomOption" />
+            <Button text="%button.add" onAction="#addCustomOption" />
         </HBox>
 
         <TableView fx:id="customOptions">
@@ -38,16 +53,16 @@
             </columnResizePolicy>
 
             <placeholder>
-                <Label text="No custom option defined yet" />
+                <Label text="%screen.configuration.customMavenOptions.tableview.placeholder" />
             </placeholder>
 
             <columns>
-                <TableColumn text="Option" sortable="false" prefWidth="150">
+                <TableColumn text="%screen.configuration.customMavenOptions.tableview.column.option" sortable="false" prefWidth="150">
                     <cellValueFactory>
                         <PropertyValueFactory property="option" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Description" sortable="false" prefWidth="250">
+                <TableColumn text="%screen.configuration.customMavenOptions.tableview.column.Description" sortable="false" prefWidth="250">
                     <cellValueFactory>
                         <PropertyValueFactory property="description" />
                     </cellValueFactory>
@@ -64,8 +79,8 @@
         </TableView>
 
         <HBox spacing="10">
-            <Button text="Cancel" onAction="#cancel" />
-            <Button text="Save" onAction="#save"  />
+            <Button text="%button.cancel" onAction="#cancel" />
+            <Button text="%button.save" onAction="#save"  />
         </HBox>
     </children>
 </VBox>

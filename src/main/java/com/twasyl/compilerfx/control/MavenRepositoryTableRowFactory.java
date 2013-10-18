@@ -8,6 +8,7 @@ import com.twasyl.compilerfx.controllers.CompilerFXController;
 import com.twasyl.compilerfx.controllers.EditRepositoryController;
 import com.twasyl.compilerfx.enums.Status;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import com.twasyl.compilerfx.utils.MavenExecutor;
 import com.twasyl.compilerfx.utils.WorkspaceStringConverter;
 import javafx.beans.property.BooleanProperty;
@@ -18,7 +19,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -38,7 +38,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
 
         final CustomMenuItem moveTo = new CustomMenuItem();
 
-        final Label moveToLabel = new Label("Move to");
+        final Label moveToLabel = new Label(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.moveTo"));
 
         final ChoiceBox<Workspace> moveToChoiceBox = new ChoiceBox<>();
         moveToChoiceBox.setConverter(new WorkspaceStringConverter());
@@ -66,7 +66,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
 
         final CustomMenuItem copyIn = new CustomMenuItem();
 
-        final Label copyInLabel = new Label("Copy in");
+        final Label copyInLabel = new Label(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.copyIn"));
 
         final ChoiceBox<Workspace> copyInChoiceBox = new ChoiceBox<>();
         copyInChoiceBox.setConverter(new WorkspaceStringConverter());
@@ -103,7 +103,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
 
         copyIn.setContent(copyInBox);
 
-        final MenuItem edit = new MenuItem("Edit");
+        final MenuItem edit = new MenuItem(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.edit"));
         edit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -123,14 +123,16 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
             }
         });
 
-        final MenuItem delete = new MenuItem("Delete");
+        final MenuItem delete = new MenuItem(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.delete"));
         delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if(row.getItem() != null) {
                     Dialog.Response response = Dialog.showConfirmDialog(null,
-                            "Delete repository?",
-                            String.format("Are you sure you want to delete the repository '%1$s'?", row.getItem().getRepositoryName()));
+                            FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.dialog.title.deleteRepository"),
+                            String.format(
+                                    FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.message.info.confirmDeletion"),
+                                    row.getItem().getRepositoryName()));
 
                     if(response == Dialog.Response.YES) {
                         final MavenRepository repository =  row.getItem();
@@ -142,7 +144,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
             }
         });
 
-        final MenuItem compile = new MenuItem("Compile");
+        final MenuItem compile = new MenuItem(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.compile"));
         compile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -153,7 +155,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
             }
         });
 
-        final MenuItem compileWithPostBuildCommands = new MenuItem("Compile & execute post build commands");
+        final MenuItem compileWithPostBuildCommands = new MenuItem(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.compileAndPostBuild"));
         compileWithPostBuildCommands.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -164,7 +166,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
             }
         });
 
-        final MenuItem abort = new MenuItem("Abort");
+        final MenuItem abort = new MenuItem(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.abort"));
         abort.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -179,7 +181,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
             }
         });
 
-        final MenuItem executePostBuildCommands = new MenuItem("Execute post build commands");
+        final MenuItem executePostBuildCommands = new MenuItem(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.executePostBuildCommands"));
         executePostBuildCommands.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -190,7 +192,7 @@ public class MavenRepositoryTableRowFactory implements Callback<TableView<MavenR
             }
         });
 
-        final MenuItem clearExecutionStack = new MenuItem("Clear execution result");
+        final MenuItem clearExecutionStack = new MenuItem(FXMLLoader.getResourceBundle().getString("control.mavenrepositorytablerowfactory.contextmenu.item.clearExecutionResult"));
         clearExecutionStack.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {

@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -89,17 +89,17 @@ public abstract class RepositoryController {
     @FXML protected void showOptionsHelp(ActionEvent event) {
         final List<MavenRepository.MavenOption> options = MavenExecutor.getMavenOptions();
 
-        final TableColumn<MavenRepository.MavenOption, String> option = new TableColumn<>("Option");
+        final TableColumn<MavenRepository.MavenOption, String> option = new TableColumn<>(FXMLLoader.getResourceBundle().getString("screen.mavenOptionsHelp.tableview.column.option"));
         option.setPrefWidth(100);
         option.setSortable(false);
         option.setCellValueFactory(new PropertyValueFactory<MavenRepository.MavenOption, String>("option"));
 
-        final TableColumn<MavenRepository.MavenOption, String> optionName = new TableColumn<>("Option name");
+        final TableColumn<MavenRepository.MavenOption, String> optionName = new TableColumn<>(FXMLLoader.getResourceBundle().getString("screen.mavenOptionsHelp.tableview.column.optionName"));
         optionName.setPrefWidth(100);
         optionName.setSortable(false);
         optionName.setCellValueFactory(new PropertyValueFactory<MavenRepository.MavenOption, String>("optionName"));
 
-        final TableColumn<MavenRepository.MavenOption, String> description = new TableColumn<>("Description");
+        final TableColumn<MavenRepository.MavenOption, String> description = new TableColumn<>(FXMLLoader.getResourceBundle().getString("screen.mavenOptionsHelp.tableview.column.description"));
         description.setPrefWidth(250);
         description.setSortable(false);
         description.setCellValueFactory(new PropertyValueFactory<MavenRepository.MavenOption, String>("description"));
@@ -125,17 +125,24 @@ public abstract class RepositoryController {
             }
         });
 
-        Dialog.showDialog(null, "Options help", optionsTable);
+        Dialog.showDialog(null, FXMLLoader.getResourceBundle().getString("dialog.title.optionsHelp"), optionsTable);
     }
 
     protected final boolean checkRepositoryValidity() {
-        File repositoryFolder = new File(this.repository.get().getPath().replaceAll("\\\\", "/"));
+        return checkRepositoryValidity(repository.get());
+    }
+
+    protected final boolean checkRepositoryValidity(MavenRepository repositoryToCheck) {
+        File repositoryFolder = new File(repositoryToCheck.getPath().replaceAll("\\\\", "/"));
         boolean repositoryValid = true;
 
         /** Perform some checks */
         if(!repositoryFolder.exists()) {
             repositoryValid = false;
-            Dialog.showErrorDialog(null, "Error", String.format("The repository '%1$s' does not exist", repositoryFolder.getAbsolutePath()));
+            Dialog.showErrorDialog(null,
+                    FXMLLoader.getResourceBundle().getString("dialog.title.error"),
+                    String.format(FXMLLoader.getResourceBundle().getString("message.error.repositoryDoesNotExist"),
+                            repositoryFolder.getAbsolutePath()));
         }
 
         if(repositoryValid) {
@@ -143,7 +150,9 @@ public abstract class RepositoryController {
 
             if(!pom.exists()) {
                 repositoryValid = false;
-                Dialog.showErrorDialog(null, "Error", "Can not find pom.xml file in the repository");
+                Dialog.showErrorDialog(null,
+                        FXMLLoader.getResourceBundle().getString("dialog.title.error"),
+                        FXMLLoader.getResourceBundle().getString("message.error.noPom"));
             }
         }
 

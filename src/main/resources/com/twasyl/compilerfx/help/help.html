@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CompilerFX help</title>
+    <style type="text/css">
+        body {
+            color: white;
+            background-color: #4D5052;
+        }
+
+        h1 {
+            border-bottom: 1px solid #FF8000;
+        }
+    </style>
+</head>
+<body>
+<h1>Introduction</h1>
+
+<p><strong>CompilerFX</strong> is an application for compiling multiple Maven repositories.
+You can add existing repositories and then compile them sequentially but also compile them individually.<br />
+It is also possible to execute post build commands after each repository compilation.<br />
+All outputs can be displayed live in a window.</p>
+
+<h1>How does it work</h1>
+
+<p><strong>CompilerFX</strong> uses a local <i><strong>mvn</strong></i> command that you must configure using the <strong>Tools</strong> menu.<br />
+Each build is launched inside the repository folder. In order to determine if the build is a success
+or not, the application checks the result of the mvn command.</p>
+
+<h2>Configuration</h2>
+
+<p>In the <strong>Tools</strong> menu and then <strong>Configuration</strong>, you can define the configuration of the software. You will need to
+enter the full path of the <strong>mvn</strong> command.<br />
+You will also be able to define custom maven options. For example if you often use an option like <strong>-DskipTests=true</strong>
+and you don't want to enter this option each time you add/edit a repository, you can define it here. Then when adding/editing
+a repository you will get it in the help window of the maven options.</p>
+
+<h2>Workspaces</h2>
+
+<p>A workspace allows you to have multiple repositories available in <i><strong>CompilerFX</strong></i>, grouped
+by versions, folders, or whatever makes sense for you. Bulk operations like removal and global
+compilation are always done in the current displayed workspace.</p>
+
+<p>If you want to delete a workspace, right click on the tab and choose delete. If the workspace
+is empty, it will directly be deleted otherwise a window will ask you if you want to trash the
+repositories present in it or move them to another one.</p>
+
+<p>To rename a workspace, right click on the tab and choose rename. To validate the change press enter and to cancel
+press escape.</p>
+
+<h2>Adding a repository</h2>
+
+<p>By clicking on the <strong>Add repository</strong> button, you will be able to add a repository to <strong>CompilerFX</strong>.
+If you don't enter a name but click on the <strong>Browse</strong> button, the name of the chosen directory will be
+added as name for the repository. Of course you can change it.<br />
+<strong>Warning:</strong> you can not add a repository that doesn't contain a <strong>pom.xml</strong> file.</p>
+
+<h2>Maven goals</h2>
+
+<p>Currently <strong>CompilerFX</strong> only supports <i><strong>clean</strong></i> and <i><strong>install</strong></i> maven goals.
+<i><strong>clean</strong></i> is executed before <i><strong>install</strong></i>. Custom goals will be available in a next version.</p>
+
+<h2>Maven options</h2>
+
+<p>Maven option can be added when adding/editing a repository using the <strong>Options</strong> field. Using the help button, maven options
+are listed, default ones as well as custom ones. Double clicking on an option will add it automatically to the field.</p>
+
+<h2>Post build commands</h2>
+
+<p>Post build commands are executed after the maven build. Each command is executed separately
+in a process. If the maven build fails, post build commands won't be executed. If one post build command
+fails, the others (if exist) aren't executed. Each command <strong>must</strong> end with a <strong>;</strong> sign in order to be valid.</p>
+
+<p>Example:</p>
+<pre><code>cd /test;
+rm file.txt;</code></pre>
+
+<h2>Build abortion</h2>
+
+<p>It is possible to abort a build by right-clicking on the repository which is compiling. By doing so, the build is aborted
+and if there are post build commands, they won't be launched. Moreover if a build belongs to a bulk build operations,
+next builds won't be launched.</p>
+
+</body>
+</html>

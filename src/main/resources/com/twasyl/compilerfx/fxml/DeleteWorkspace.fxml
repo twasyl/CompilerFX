@@ -16,7 +16,7 @@
 
     <children>
         <HBox spacing="10">
-            <Label text="Move repositories to:" />
+            <Label text="%screen.deleteWorkspace.label.moveTo" />
             <ChoiceBox fx:id="workspaces">
                 <converter>
                     <WorkspaceStringConverter />
@@ -25,8 +25,8 @@
         </HBox>
 
         <HBox spacing="10">
-            <Button text="Cancel" onAction="#cancel" />
-            <Button text="Delete" onAction="#delete" />
+            <Button text="%button.cancel" onAction="#cancel" />
+            <Button text="%button.delete" onAction="#delete" />
         </HBox>
     </children>
 </VBox>

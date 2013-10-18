@@ -10,7 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 
@@ -23,9 +23,11 @@ public class EditRepositoryController extends RepositoryController implements In
     private final ObjectProperty<MavenRepository> editedRepository = new SimpleObjectProperty<>(new MavenRepository());
 
     @FXML private void edit(ActionEvent event) {
-        Dialog.Response response = Dialog.showConfirmDialog(null, "Edit repository", "Do you really want to apply modifications on this repository?");
+        Dialog.Response response = Dialog.showConfirmDialog(null,
+                FXMLLoader.getResourceBundle().getString("screen.editRepository.dialog.title.editRepository"),
+                FXMLLoader.getResourceBundle().getString("screen.editRepository.message.info.confirmEdition"));
 
-        if(response == Dialog.Response.YES && checkRepositoryValidity()) {
+        if(response == Dialog.Response.YES && checkRepositoryValidity(this.editedRepository.get())) {
             this.editedRepository.get().unbindAll();
 
             if(this.editedRepository.get().getPostBuildCommands() != null)

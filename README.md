@@ -24,11 +24,11 @@ a repository you will get it in the help window of the maven options.
 ## Workspaces
 
 A workspace allows you to have multiple repositories available in ***CompilerFX***, grouped
-by versions, folders, or whatever makes sense for you. Bulk operations like removall and global
+by versions, folders, or whatever makes sense for you. Bulk operations like removal and global
 compilation are always done in the current displayed workspace.  
   
 If you want to delete a workspace, right click on the tab and choose delete. If the workspace
-is empty, it will directly be deleted otherwhise a window will ask you if you want to trash the 
+is empty, it will directly be deleted otherwise a window will ask you if you want to trash the
 repositories present in it or move them to another one.
 
 To rename a workspace, right click on the tab and choose rename. To validate the change press enter and to cancel
@@ -36,8 +36,8 @@ press escape.
 
 ## Adding a repository
 
-By clicking on the *Add repository* button, you will be able to add a repository to **CompilerFX**.
-If you don't enter a name but click on the *Browse* button, the name of the chosen directory will be
+By clicking on the **Add repository** button, you will be able to add a repository to **CompilerFX**.
+If you don't enter a name but click on the **Browse** button, the name of the chosen directory will be
 added as name for the repository. Of course you can change it.  
 **Warning:** you can not add a repository that doesn't contain a **pom.xml** file.
 

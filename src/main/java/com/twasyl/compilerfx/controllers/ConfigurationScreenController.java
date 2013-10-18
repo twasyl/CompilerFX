@@ -1,28 +1,29 @@
 package com.twasyl.compilerfx.controllers;
 
+import com.twasyl.compilerfx.app.CompilerFXApp;
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ConfigurationScreenController implements Initializable {
 
+    @FXML private ChoiceBox<Locale> language;
     @FXML private TextField mvnCommand;
     @FXML private Button browseMvnCommand;
     @FXML private TableView<MavenRepository.MavenOption> customOptions;
@@ -54,6 +55,9 @@ public class ConfigurationScreenController implements Initializable {
     }
 
     @FXML private void save(ActionEvent event) {
+        final boolean languageChanged = !this.language.getValue().equals(Configuration.getInstance().getUiLocale()) ? true : false;
+
+        Configuration.getInstance().setUiLocale(this.language.getValue());
         Configuration.getInstance().setMavenCommand(this.mvnCommand.getText());
         Configuration.getInstance().getCustomMavenOptions().clear();
         Configuration.getInstance().getCustomMavenOptions().addAll(this.customOptions.getItems());
@@ -61,7 +65,14 @@ public class ConfigurationScreenController implements Initializable {
 
         try {
             Parent parent = FXMLLoader.load(getClass().getResource("/com/twasyl/compilerfx/fxml/MavenRepositories.fxml"));
-            CompilerFXController.getCurrentInstance().switchScreen(parent);
+
+            if(languageChanged) {
+                CompilerFXApp.getCurrent().getCurrentStage().setScene(
+                        CompilerFXApp.getCurrent().loadFullUI(parent)
+                );
+            } else {
+                CompilerFXController.getCurrentInstance().switchScreen(parent);
+            }
         } catch (IOException e) {
         }
     }
@@ -82,6 +93,14 @@ public class ConfigurationScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.language.getItems().addAll(
+                new Locale("en"),
+                new Locale("fr"),
+                new Locale("de")
+        );
+
+        this.language.setValue(Configuration.getInstance().getUiLocale());
+
         if(Configuration.getInstance().getMavenCommand() != null) {
             this.mvnCommand.setText(Configuration.getInstance().getMavenCommand());
         }

@@ -21,7 +21,7 @@
         <ToolBar>
             <Button onAction="#displayAddRepositoryScreen">
                 <tooltip>
-                    <Tooltip text="Add a repository" />
+                    <Tooltip text="%screen.mavenRepositories.toolbar.button.addRepository" />
                 </tooltip>
                 <graphic>
                     <ImageView>
@@ -33,7 +33,7 @@
             </Button>
             <Button onAction="#deleteRepositories">
                 <tooltip>
-                    <Tooltip text="Delete selection" />
+                    <Tooltip text="%screen.mavenRepositories.toolbar.button.deleteSelection" />
                 </tooltip>
                 <graphic>
                     <ImageView>
@@ -45,7 +45,7 @@
             </Button>
             <SplitMenuButton onAction="#compileSelection">
                 <tooltip>
-                    <Tooltip text="Compile selection" />
+                    <Tooltip text="%screen.mavenRepositories.toolbar.button.compileSelection" />
                 </tooltip>
                 <graphic>
                     <ImageView>
@@ -55,13 +55,13 @@
                     </ImageView>
                 </graphic>
                 <items>
-                    <MenuItem text="Compile" onAction="#compileSelection"/>
-                    <MenuItem text="Compile and execute post build commands" onAction="#compileAndExecutePostBuildCommandsOnSelection"/>
+                    <MenuItem text="%screen.mavenRepositories.toolbar.button.compile" onAction="#compileSelection"/>
+                    <MenuItem text="%screen.mavenRepositories.toolbar.button.compileAndExecutePostBuildCommands" onAction="#compileAndExecutePostBuildCommandsOnSelection"/>
                 </items>
             </SplitMenuButton>
             <SplitMenuButton fx:id="abortAll" onAction="#abortWorkspaceBuilds">
                 <tooltip>
-                    <Tooltip text="Abort all" />
+                    <Tooltip text="%screen.mavenRepositories.toolbar.button.abortAll" />
                 </tooltip>
                 <graphic>
                     <ImageView>
@@ -71,13 +71,13 @@
                     </ImageView>
                 </graphic>
                 <items>
-                    <MenuItem text="Abort for this workspace" onAction="#abortWorkspaceBuilds"/>
-                    <MenuItem text="Abort for all workspaces" onAction="#abortAllWorkspacesBuilds"/>
+                    <MenuItem text="%screen.mavenRepositories.toolbar.button.abortForThisWorkspace" onAction="#abortWorkspaceBuilds"/>
+                    <MenuItem text="%screen.mavenRepositories.toolbar.button.abortForAllWorkspaces" onAction="#abortAllWorkspacesBuilds"/>
                 </items>
             </SplitMenuButton>
             <Button onAction="#reloadRepositories">
                 <tooltip>
-                    <Tooltip text="Reload repositories" />
+                    <Tooltip text="%screen.mavenRepositories.toolbar.button.releodRepositories" />
                 </tooltip>
                 <graphic>
                     <ImageView>

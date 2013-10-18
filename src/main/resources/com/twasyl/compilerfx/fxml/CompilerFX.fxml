@@ -15,21 +15,21 @@
     <top>
         <MenuBar>
             <menus>
-                <Menu text="File">
+                <Menu text="%application.menu.file.name">
                     <items>
-                        <MenuItem text="Quit" onAction="#quitApplication" />
+                        <MenuItem text="%application.menu.file.item.quit.name" onAction="#quitApplication" />
                     </items>
                 </Menu>
-                <Menu text="Tools">
+                <Menu text="%application.menu.tools.name">
                     <items>
-                        <MenuItem text="Configuration" onAction="#showConfigurationScreen" />
-                        <MenuItem text="Add workspace" onAction="#showAddWorkspaceScreen" />
+                        <MenuItem text="%application.menu.file.item.configuration.name" onAction="#showConfigurationScreen" />
+                        <MenuItem text="%application.menu.file.item.addWorkspace.name" onAction="#showAddWorkspaceScreen" />
                     </items>
                 </Menu>
-                <Menu text="?">
+                <Menu text="%application.menu.help.name">
                     <items>
-                        <MenuItem text="About" onAction="#showAbout" />
-                        <MenuItem text="Help" onAction="#showHelp" />
+                        <MenuItem text="%application.menu.help.item.about.name" onAction="#showAbout" />
+                        <MenuItem text="%application.menu.help.item.help.name" onAction="#showHelp" />
                     </items>
                 </Menu>
             </menus>
@@ -38,9 +38,6 @@
 
     <center>
         <AnchorPane fx:id="screenContent">
-            <children>
-                <fx:include source="MavenRepositories.fxml" />
-            </children>
         </AnchorPane>
     </center>
 </BorderPane>

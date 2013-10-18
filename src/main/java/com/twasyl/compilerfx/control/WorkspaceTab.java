@@ -6,13 +6,11 @@ import com.twasyl.compilerfx.beans.Workspace;
 import com.twasyl.compilerfx.controllers.DeleteWorkspaceController;
 import com.twasyl.compilerfx.controllers.WorkspaceController;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import com.twasyl.compilerfx.utils.UIUtils;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
@@ -32,15 +30,17 @@ public class WorkspaceTab extends Tab {
 
         final ContextMenu menu = new ContextMenu();
 
-        final MenuItem delete = new MenuItem("Delete");
+        final MenuItem delete = new MenuItem(FXMLLoader.getResourceBundle().getString("control.workspacetab.contextmenu.item.delete"));
         delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
 
                 if (getWorkspace() != null && getWorkspace().getRepositories().isEmpty()) {
                     Dialog.Response response = Dialog.showConfirmDialog(null,
-                            "Delete workspace",
-                            String.format("Do you really want to delete the workspace '%1$s'?", getWorkspace().getName()));
+                            FXMLLoader.getResourceBundle().getString("control.workspacetab.dialog.title.deleteWorkspace"),
+                            String.format(
+                                    FXMLLoader.getResourceBundle().getString("control.workspacetab.message.info.confirmDeletion"),
+                                    getWorkspace().getName()));
 
                     if(response == Dialog.Response.YES) {
                         Configuration.getInstance().getWorkspaces().remove(getWorkspace());
@@ -56,7 +56,7 @@ public class WorkspaceTab extends Tab {
 
                         final Scene scene = UIUtils.createScene(root);
                         final Stage stage = new Stage();
-                        stage.setTitle("Delete workspace");
+                        stage.setTitle(FXMLLoader.getResourceBundle().getString("control.workspacetab.dialog.title.deleteWorkspace"));
                         stage.setScene(scene);
                         stage.show();
                         controller.setStage(stage);
@@ -68,7 +68,7 @@ public class WorkspaceTab extends Tab {
             }
         });
 
-        final MenuItem rename = new MenuItem("Rename");
+        final MenuItem rename = new MenuItem(FXMLLoader.getResourceBundle().getString("control.workspacetab.contextmenu.item.rename"));
         rename.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -82,8 +82,10 @@ public class WorkspaceTab extends Tab {
                             WorkspaceTab.this.setText(getWorkspace().getName());
                         } else if(keyEvent.getCode().equals(KeyCode.ENTER)) {
                             if(!field.getText().isEmpty()) {
-                                Dialog.Response response = Dialog.showConfirmDialog(null, "Rename workspace",
-                                        String.format("Do you really want to rename the workspace '%1$s' to '%2$s'?",
+                                Dialog.Response response = Dialog.showConfirmDialog(null,
+                                        FXMLLoader.getResourceBundle().getString("control.workspacetab.dialog.title.renameWorkspace"),
+                                        String.format(
+                                                FXMLLoader.getResourceBundle().getString("control.workspacetab.message.info.confirmRenaming"),
                                                 getWorkspace().getName(), field.getText()));
 
                                 if(response == Dialog.Response.YES) {
@@ -93,7 +95,9 @@ public class WorkspaceTab extends Tab {
                                     WorkspaceTab.this.setText(getWorkspace().getName());
                                 }
                             } else {
-                                Dialog.showErrorDialog(null, "Rename workspace", "The name of the workspace can not be empty");
+                                Dialog.showErrorDialog(null,
+                                        FXMLLoader.getResourceBundle().getString("control.workspacetab.dialog.title.renameWorkspace"),
+                                        FXMLLoader.getResourceBundle().getString("control.workspacetab.message.error.emptyWorkspaceName"));
                             }
                         }
                     }

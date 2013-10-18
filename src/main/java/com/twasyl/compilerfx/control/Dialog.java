@@ -1,5 +1,6 @@
 package com.twasyl.compilerfx.control;
 
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import com.twasyl.compilerfx.utils.UIUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -71,7 +72,7 @@ public class Dialog extends Stage {
     }
 
     public static Response showDialog(Stage owner, String title, Node content) {
-        final Button okButton = new Button("OK");
+        final Button okButton = new Button(FXMLLoader.getResourceBundle().getString("button.ok"));
 
         final Dialog dialog = buildDialog(owner, title, content, okButton);
 
@@ -83,9 +84,9 @@ public class Dialog extends Stage {
     }
 
     public static Response showConfirmDialog(Stage owner, String title, String message) {
-        final Button yesButton = new Button("Yes");
+        final Button yesButton = new Button(FXMLLoader.getResourceBundle().getString("button.yes"));
         yesButton.requestFocus();
-        final Button noButton = new Button("No");
+        final Button noButton = new Button(FXMLLoader.getResourceBundle().getString("button.no"));
 
         final Text messageText = new Text(message);
         messageText.setWrappingWidth(300);
@@ -102,7 +103,7 @@ public class Dialog extends Stage {
     }
 
     public static Response showErrorDialog(Stage owner, String title, String message) {
-        final Button okButton = new Button("OK");
+        final Button okButton = new Button(FXMLLoader.getResourceBundle().getString("button.ok"));
 
         final Text textMessage = new Text(message);
         textMessage.setStyle("-fx-fill: white; -fx-font-size: 15pt;");

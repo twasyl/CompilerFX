@@ -2,21 +2,17 @@ package com.twasyl.compilerfx.controllers;
 
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
-import com.twasyl.compilerfx.control.Dialog;
 import com.twasyl.compilerfx.enums.Status;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

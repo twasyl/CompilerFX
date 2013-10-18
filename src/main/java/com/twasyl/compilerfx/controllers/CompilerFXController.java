@@ -2,16 +2,14 @@ package com.twasyl.compilerfx.controllers;
 
 import com.twasyl.compilerfx.app.CompilerFXApp;
 import com.twasyl.compilerfx.control.Dialog;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -25,7 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.markdown4j.Markdown4jProcessor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,29 +61,32 @@ public class CompilerFXController implements Initializable {
     }
 
     @FXML private void showHelp(ActionEvent event) {
-        try {
-            final String help = new Markdown4jProcessor().process(getClass().getResourceAsStream("/com/twasyl/compilerfx/help/README.md"));
 
-            final WebView webView = new WebView();
-            webView.getEngine().loadContent(help);
+        final WebView webView = new WebView();
+        webView.getEngine().load(getClass().getResource("/com/twasyl/compilerfx/help/help.html").toExternalForm());
 
-            final Scene scene = new Scene(webView);
-            final Stage stage = new Stage();
-            stage.setTitle("Help");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-        }
+        final Scene scene = new Scene(webView);
+        final Stage stage = new Stage();
+        stage.setTitle(FXMLLoader.getResourceBundle().getString("screen.help.dialog.title"));
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML private void showAbout(ActionEvent event) {
         final StringBuilder changeLog = new StringBuilder();
+        final String versionText = FXMLLoader.getResourceBundle().getString("screen.about.label.version");
         changeLog.append("Change logs:\n\n");
-        changeLog.append("version 0.3.1:\n\n");
+        changeLog.append(versionText + " 0.4.0:\n\n");
+        changeLog.append("  - Fix verification of repository when editing a repository\n");
+        changeLog.append("  - Help is in HTML, no more in markdown\n");
+        changeLog.append("  - Allow to change UI language\n");
+        changeLog.append("  - German and french languages added");
+        changeLog.append("\n\n");
+        changeLog.append(versionText + " 0.3.1:\n\n");
         changeLog.append("  - Fix commands execution on Windows platforms\n");
         changeLog.append("  - Edit button in edition screen for a repository is renamed to Save");
         changeLog.append("\n\n");
-        changeLog.append("version 0.3.0:\n\n");
+        changeLog.append(versionText + " 0.3.0:\n\n");
         changeLog.append("  - Abort feature for the current workspace and for all\n");
         changeLog.append("  - Feature for creating custom maven options\n");
         changeLog.append("  - Help button in the add/edit repository screen for adding maven options\n");
@@ -97,7 +97,7 @@ public class CompilerFXController implements Initializable {
         changeLog.append("  - Add confirmation message for renaming of workspaces\n");
         changeLog.append("  - Add error message for renaming workspaces with empty names");
         changeLog.append("\n\n");
-        changeLog.append("version 0.2.0:\n\n");
+        changeLog.append(versionText + " 0.2.0:\n\n");
         changeLog.append("  - Abort feature for the current workspace and for all\n");
         changeLog.append("  - Fix bug that blocked workspace's renaming when the workspace was freshly added\n");
         changeLog.append("  - Use dialogs in the whole application, even for error messages\n");
@@ -119,34 +119,43 @@ public class CompilerFXController implements Initializable {
         helpContent.setAlignment(Pos.CENTER);
         helpContent.getChildren().addAll(
                 new Label("CompilerFX"),
-                new Label("version " + CompilerFXApp.version),
-                new Label("Author: Thierry Wasylczenko"),
+                new Label(versionText + " " + CompilerFXApp.version),
+                new Label(FXMLLoader.getResourceBundle().getString("screen.about.label.author") + " Thierry Wasylczenko"),
                 changeLogText
         );
 
-        Dialog.showDialog(null, "About", helpContent);
+        Dialog.showDialog(null, FXMLLoader.getResourceBundle().getString("dialog.title.about"), helpContent);
     }
 
     public void switchScreen(final Node to) {
 
-        final Node currentScreen = screenContent.getChildren().get(0);
+        final Node currentScreen = screenContent.getChildren().isEmpty() ? null : screenContent.getChildren().get(0);
 
         to.setOpacity(0);
 
-        FadeTransition fadeIn = new FadeTransition(new Duration(500), to);
+        final FadeTransition fadeIn = new FadeTransition(new Duration(500), to);
         fadeIn.setToValue(1);
 
-        FadeTransition fadeOut = new FadeTransition(new Duration(500), currentScreen);
-        fadeOut.setToValue(0);
+        FadeTransition fadeOut = null;
+
+        if(currentScreen != null) {
+            fadeOut = new FadeTransition(new Duration(500), currentScreen);
+            fadeOut.setToValue(0);
+        }
 
         screenContent.getChildren().add(to);
 
         ParallelTransition effect = new ParallelTransition();
-        effect.getChildren().addAll(fadeIn, fadeOut);
+        if(currentScreen != null) {
+            effect.getChildren().addAll(fadeIn, fadeOut);
+        } else {
+            effect.getChildren().add(fadeIn);
+        }
+
         effect.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                screenContent.getChildren().remove(currentScreen);
+                if(currentScreen != null) screenContent.getChildren().remove(currentScreen);
             }
         });
 

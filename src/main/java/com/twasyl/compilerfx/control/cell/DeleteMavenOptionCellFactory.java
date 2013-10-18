@@ -2,6 +2,7 @@ package com.twasyl.compilerfx.control.cell;
 
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.control.Dialog;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -23,7 +24,10 @@ public class DeleteMavenOptionCellFactory implements Callback<TableColumn<MavenR
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         if(getTableRow().getItem() != null) {
-                            Dialog.Response response = Dialog.showConfirmDialog(null, "Maven custom option", "Do you really want to delete this option?");
+                            Dialog.Response response = Dialog.showConfirmDialog(null,
+                                    FXMLLoader.getResourceBundle().getString("control.deletemavenoptioncellfactory.dialog.title.mavenCustomOption"),
+                                    FXMLLoader.getResourceBundle().getString("control.deletemavenoptioncellfactory.message.info.deleteOption"));
+
                             if(response == Dialog.Response.YES) {
                                 getTableView().getItems().remove(getTableRow().getItem());
                             }

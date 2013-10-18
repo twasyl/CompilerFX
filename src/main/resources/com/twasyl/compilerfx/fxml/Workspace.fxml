@@ -27,13 +27,13 @@
     </rowFactory>
 
     <placeholder>
-        <Label text="Drag a repository here" />
+        <Label text="%screen.workspace.tableview.placeholder" />
     </placeholder>
 
     <columns>
         <TableColumn sortable="false" prefWidth="100">
             <graphic>
-                <CheckBox text="Compile" fx:id="compileAll" />
+                <CheckBox text="%screen.workspace.tableview.column.compile" fx:id="compileAll" />
             </graphic>
             <cellValueFactory>
                 <PropertyValueFactory property="selected" />
@@ -42,12 +42,12 @@
                 <CompileRepositoryCellFactory />
             </cellFactory>
         </TableColumn>
-        <TableColumn text="Name" sortable="false">
+        <TableColumn text="%screen.workspace.tableview.column.name" sortable="false">
             <cellValueFactory>
                 <PropertyValueFactory property="repositoryName" />
             </cellValueFactory>
         </TableColumn>
-        <TableColumn text="Status" sortable="false">
+        <TableColumn text="%screen.workspace.tableview.column.status" sortable="false">
             <cellValueFactory>
                 <PropertyValueFactory property="status" />
             </cellValueFactory>
@@ -55,7 +55,7 @@
                 <StatusCellFactory />
             </cellFactory>
         </TableColumn>
-        <TableColumn text="Execution result" sortable="false" prefWidth="150">
+        <TableColumn text="%screen.workspace.tableview.column.executionResult" sortable="false" prefWidth="150">
             <cellValueFactory>
                 <PropertyValueFactory property="lastExecutionStack" />
             </cellValueFactory>
@@ -63,7 +63,7 @@
                 <MavenOutputCellFactory onAction="#displayExecutionResult" />
             </cellFactory>
         </TableColumn>
-        <TableColumn text="Priority" sortable="false">
+        <TableColumn text="%screen.workspace.tableview.column.priority" sortable="false">
             <cellValueFactory>
                 <PropertyValueFactory property="priority" />
             </cellValueFactory>

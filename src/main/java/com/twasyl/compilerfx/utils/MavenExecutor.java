@@ -121,16 +121,19 @@ public class MavenExecutor {
 
         if(!mavenCommand.exists()) {
             commandValid = false;
-            message = String.format("The maven command '%1$s' does not exist", Configuration.getInstance().getMavenCommand());
+            message = String.format(
+                    FXMLLoader.getResourceBundle().getString("message.error.mavenCommandDoesNotExist"),
+                    Configuration.getInstance().getMavenCommand());
         }
 
         if(commandValid && !mavenCommand.canExecute()) {
             commandValid = false;
-            message = String.format("The maven command is not executable");
+            message = String.format(FXMLLoader.getResourceBundle().getString("message.error.mavenCommandNotExecutable"));
         }
 
         if(!commandValid) {
-            Dialog.showErrorDialog(null, "Error", message);
+            Dialog.showErrorDialog(null,
+                    FXMLLoader.getResourceBundle().getString("dialog.title.error"), message);
         } else {
             Runnable run = new Runnable() {
                 @Override
@@ -148,7 +151,11 @@ public class MavenExecutor {
                         repositoryDirectory = new File(repository.getPath());
 
                         if(!repositoryDirectory.exists()) {
-                            Dialog.showErrorDialog(null, "Error", String.format("Can not compile repository '%1$s' because it does not exist", repository.getRepositoryName()));
+                            Dialog.showErrorDialog(null,
+                                    FXMLLoader.getResourceBundle().getString("dialog.title.error"),
+                                    String.format(
+                                            FXMLLoader.getResourceBundle().getString("message.error.canNotCompileNotExistingRepository"),
+                                            repository.getRepositoryName()));
                             if(stopIfFailure) break;
                         } else {
                             repository.setLastExecutionStack(null);
@@ -275,7 +282,11 @@ public class MavenExecutor {
                     repositoryDirectory = new File(repository.getPath());
 
                     if(!repositoryDirectory.exists()) {
-                        Dialog.showErrorDialog(null, "Error", String.format("Can not compile repository '%1$s' because it does not exist", repository.getRepositoryName()));
+                        Dialog.showErrorDialog(null,
+                                FXMLLoader.getResourceBundle().getString("dialog.title.error"),
+                                String.format(
+                                        FXMLLoader.getResourceBundle().getString("message.error.canNotExecutePostBuildCommandsNotExistingRepository"),
+                                        repository.getRepositoryName()));
                         if(stopIfFailure) break;
                     } else {
                         try {
@@ -320,9 +331,9 @@ public class MavenExecutor {
                                 }
                             }
                         } catch (IOException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            e.printStackTrace();
                         } catch (InterruptedException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            e.printStackTrace();
                         } finally {
                             if (process == null || process.exitValue() != 0) repository.setStatus(Status.IN_ERROR);
                             else repository.setStatus(Status.DONE);
@@ -394,7 +405,7 @@ public class MavenExecutor {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
         }

@@ -19,6 +19,7 @@ public class ConfigurationWorker {
 
     private static File configurationFile;
 
+    private static final String UI_LOCALE = "application.uiLocale";
     private static final String MAVEN_COMMAND_PROPERTY = "maven.command";
     private static final String REPOSITORY_NAME = "repository.id.%1$s.name";
     private static final String REPOSITORY_PATH = "repository.id.%1$s.path";
@@ -53,6 +54,7 @@ public class ConfigurationWorker {
             throw new MissingConfigurationFileException(e);
         }
 
+        Configuration.getInstance().setUiLocale(LocaleUtils.parseString(properties.getProperty(UI_LOCALE)));
         Configuration.getInstance().setMavenCommand((String) properties.get(MAVEN_COMMAND_PROPERTY));
         Configuration.getInstance().getRepositories().clear();
         Configuration.getInstance().getWorkspaces().clear();
@@ -146,6 +148,7 @@ public class ConfigurationWorker {
         try {
             writer = new PrintWriter(new FileOutputStream(getConfigurationFile()));
 
+            writer.println(String.format("%1$s=%2$s", UI_LOCALE, Configuration.getInstance().getUiLocale() == null ? "" : LocaleUtils.toString(Configuration.getInstance().getUiLocale())));
             writer.println(String.format("%1$s=%2$s", MAVEN_COMMAND_PROPERTY, Configuration.getInstance().getMavenCommand()));
 
             for(MavenRepository.MavenOption option : Configuration.getInstance().getCustomMavenOptions()) {

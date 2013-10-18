@@ -3,26 +3,27 @@ package com.twasyl.compilerfx.app;
 import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.MavenRepository;
 import com.twasyl.compilerfx.control.Dialog;
+import com.twasyl.compilerfx.controllers.CompilerFXController;
 import com.twasyl.compilerfx.enums.Status;
 import com.twasyl.compilerfx.exceptions.MissingConfigurationFileException;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import com.twasyl.compilerfx.utils.UIUtils;
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 public class CompilerFXApp extends Application {
 
-    public static String version = "0.3.1";
+    public static String version = "0.4.0";
     private static final ReadOnlyObjectProperty<CompilerFXApp> current = new SimpleObjectProperty<>();
     private final ReadOnlyObjectProperty<Stage> currentStage = new SimpleObjectProperty<>();
 
@@ -31,9 +32,7 @@ public class CompilerFXApp extends Application {
         ((SimpleObjectProperty<CompilerFXApp>) CompilerFXApp.current).set(this);
         ((SimpleObjectProperty<Stage>) currentStage).set(stage);
 
-        Parent root = FXMLLoader.load(getClass().getResource("/com/twasyl/compilerfx/fxml/CompilerFX.fxml"));
-
-        final Scene scene = UIUtils.createScene(root);
+        final Scene scene = loadFullUI((Parent) FXMLLoader.load(getClass().getResource("/com/twasyl/compilerfx/fxml/MavenRepositories.fxml")));
         stage.setTitle("CompilerFX");
         stage.setScene(scene);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -41,12 +40,11 @@ public class CompilerFXApp extends Application {
             public void handle(WindowEvent windowEvent) {
                 // Only directly close the app if there are no current processes, otherwise ask what to do
                 if (!Configuration.getInstance().getCurrentBuilds().isEmpty()) {
-                    final String message = String.format("%1$s currently active. Abort %2$s?",
-                            Configuration.getInstance().getCurrentBuilds().size() > 1 ? "Processes are" : "A process is",
-                            Configuration.getInstance().getCurrentBuilds().size() > 1 ? "them" : "it"
-                    );
+                    final String message = Configuration.getInstance().getCurrentBuilds().size() > 1 ?
+                            FXMLLoader.getResourceBundle().getString("application.message.info.activeProcesses") :
+                            FXMLLoader.getResourceBundle().getString("application.message.info.activeProcess");
 
-                    if (Dialog.showConfirmDialog(stage, "Quit?", message) == Dialog.Response.YES) {
+                    if (Dialog.showConfirmDialog(stage, FXMLLoader.getResourceBundle().getString("dialog.title.quit"), message) == Dialog.Response.YES) {
                         final Iterator<MavenRepository> processIterator = Configuration.getInstance().getCurrentBuilds().iterator();
                         MavenRepository repository;
 
@@ -87,8 +85,28 @@ public class CompilerFXApp extends Application {
         currentStage.get().fireEvent(event);
     }
 
-    private static final ReadOnlyObjectProperty<CompilerFXApp> currentProperty() { return current; }
+    public Scene loadFullUI(Parent screenContent) {
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/twasyl/compilerfx/fxml/CompilerFX.fxml"));
+
+        try {
+            Parent root = (Parent) loader.load();
+            CompilerFXController controller = loader.getController();
+
+            controller.switchScreen(screenContent);
+
+            return UIUtils.createScene(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static final ReadOnlyObjectProperty<CompilerFXApp> currentProperty() { return current; }
     public static final CompilerFXApp getCurrent() { return currentProperty().get(); }
+
+    public ReadOnlyObjectProperty<Stage> currentStageProperty() { return this.currentStage; }
+    public Stage getCurrentStage() { return this.currentStageProperty().get(); }
 
     public static void main(String[] args) {
         Application.launch(CompilerFXApp.class, args);

@@ -20,28 +20,28 @@
     </fx:define>
 
     <children>
-        <Label styleClass="screen-title" text="Add a repository" />
+        <Label styleClass="screen-title" text="%screen.addRepository.title.label.addRepository" />
 
         <HBox spacing="10">
-            <Label text="Name:" />
+            <Label text="%screen.addRepository.label.name" />
             <TextField prefColumnCount="25" fx:id="name" />
         </HBox>
         <HBox spacing="10">
-            <Label text="Path:" />
+            <Label text="%screen.addRepository.label.path" />
             <PathTextField prefColumnCount="25" fx:id="path" />
-            <Button text="..." onAction="#browse" />
+            <Button text="%button.browse" onAction="#browse" />
         </HBox>
         <HBox spacing="10">
-            <Label text="Options:" />
+            <Label text="%screen.addRepository.label.options" />
             <TextField prefColumnCount="25" fx:id="options" />
             <Button text="?" onAction="#showOptionsHelp" />
         </HBox>
         <HBox spacing="10">
-            <Label text="Post build commands:" />
+            <Label text="%screen.addRepository.label.postBuildCommands" />
             <TextArea prefColumnCount="25" prefRowCount="5" fx:id="postBuildCommands" />
         </HBox>
         <HBox spacing="10">
-            <Label text="Workspace:" />
+            <Label text="%screen.addRepository.label.workspace" />
             <ChoiceBox fx:id="workspace" items="${configuration.workspacesAsList}">
                 <converter>
                     <WorkspaceStringConverter />
@@ -53,8 +53,8 @@
             <CheckBox text="install" selected="true" fx:id="install" />
         </HBox>
         <HBox spacing="10">
-            <Button text="Cancel" onAction="#cancel" />
-            <Button text="Add" onAction="#add" />
+            <Button text="%button.cancel" onAction="#cancel" />
+            <Button text="%button.add" onAction="#add" />
         </HBox>
     </children>
 </VBox>

@@ -4,12 +4,11 @@ import com.twasyl.compilerfx.beans.Configuration;
 import com.twasyl.compilerfx.beans.Workspace;
 import com.twasyl.compilerfx.control.Dialog;
 import com.twasyl.compilerfx.utils.ConfigurationWorker;
-import com.twasyl.compilerfx.utils.UIUtils;
+import com.twasyl.compilerfx.utils.FXMLLoader;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
@@ -46,7 +45,9 @@ public class AddWorkspaceController implements Initializable {
 
     private void addWorkspace() {
         if(this.workspace.getName().trim().isEmpty()) {
-            Dialog.showErrorDialog(null, "Error", "The name of the workspace can not be empty");
+            Dialog.showErrorDialog(null,
+                    FXMLLoader.getResourceBundle().getString("dialog.title.error"),
+                    FXMLLoader.getResourceBundle().getString("message.error.emtpyWorkspaceName"));
         } else {
             this.workspace.setId(System.currentTimeMillis());
             this.workspace.setActive(false);

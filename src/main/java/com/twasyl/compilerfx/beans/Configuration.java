@@ -7,6 +7,7 @@ import javafx.collections.ObservableSet;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.TreeSet;
 
 public class Configuration {
@@ -17,6 +18,7 @@ public class Configuration {
     private final SetProperty<Workspace> workspaces = new SimpleSetProperty<>();
     private final SetProperty<MavenRepository.MavenOption> customMavenOptions = new SimpleSetProperty<>();
     private final ListProperty<MavenRepository> currentBuilds = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<MavenRepository>()));
+    private final ObjectProperty<Locale> uiLocale = new SimpleObjectProperty<>();
 
     private Configuration() {
         TreeSet<MavenRepository> repositoryTreeSet = new TreeSet<>(new Comparator<MavenRepository>() {
@@ -67,6 +69,10 @@ public class Configuration {
     public SetProperty<MavenRepository.MavenOption> customMavenOptionsProperty() { return this.customMavenOptions; }
     public ObservableSet<MavenRepository.MavenOption> getCustomMavenOptions() { return this.customMavenOptionsProperty().get(); }
     public void setCustomMavenOptions(ObservableSet<MavenRepository.MavenOption> customMavenOptions) { this.customMavenOptionsProperty().set(customMavenOptions); }
+
+    public ObjectProperty<Locale> uiLocaleProperty() { return this.uiLocale; }
+    public Locale getUiLocale() { return uiLocaleProperty().get(); }
+    public void setUiLocale(Locale uiLocale) { this.uiLocale.set(uiLocale); }
 
     public ObservableList<Workspace> getWorkspacesAsList() { return FXCollections.observableArrayList(getWorkspaces()); }
 }

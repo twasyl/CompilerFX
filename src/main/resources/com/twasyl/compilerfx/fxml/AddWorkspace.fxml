@@ -13,16 +13,16 @@
             spacing="10">
 
     <children>
-        <Label styleClass="screen-title" text="Add a workspace" />
+        <Label styleClass="screen-title" text="%screen.addWorkspace.title.label.addWorkspace" />
 
         <HBox spacing="10">
-            <Label text="Name:" />
+            <Label text="%screen.addWorkspace.label.name" />
             <TextField prefColumnCount="25" fx:id="name" onKeyPressed="#keyPressedOnName" />
         </HBox>
 
         <HBox spacing="10">
-            <Button text="Cancel" onAction="#cancel" />
-            <Button text="Add" onAction="#add" />
+            <Button text="%button.cancel" onAction="#cancel" />
+            <Button text="%button.add" onAction="#add" />
         </HBox>
     </children>
 </VBox>
